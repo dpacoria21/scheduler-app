@@ -6,22 +6,37 @@ interface Props {
     placeholder: string,
     keyboardType: KeyboardTypeOptions,
     secureText?: boolean,
+    onChange: () => void,
+    onBlur: () => void,
+    value: string,
+    errors?: object
 }
 
-export const Input = ({label, placeholder, keyboardType = 'default', secureText = false}: Props) => {
+export const Input = ({errors, label, placeholder, keyboardType = 'default', secureText = false, onChange, onBlur, value}: Props) => {
+
     return (
         <View style={stylesInput.inputContainer}>
-            <Text style={stylesInput.inputLabel}>
+            <Text style={{
+                ...stylesInput.inputLabel,
+                color: (errors) ? 'rgba(191, 22, 80, 0.65)' : 'rgba(0, 0, 0, 0.4)',
+            }}>
                 {label}
             </Text>
             <TextInput
                 placeholder={placeholder}
-                placeholderTextColor={'rgba(0, 0, 0, 0.4)'}
-                style={stylesInput.input}
+                placeholderTextColor={(errors) ? 'rgba(191, 22, 80, 0.3)' : 'rgba(0, 0, 0, 0.4)'}
+                style={{
+                    ...stylesInput.input,
+                    borderColor: (errors) ? '#bf1650' : 'rgba(0, 0, 0, 0.3)',
+                }}
                 keyboardType={keyboardType}
                 secureTextEntry={secureText}
                 autoCorrect={false}
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
             />
+            {errors && <Text style={stylesInput.labelError}>⚠ This is required</Text>}
         </View>
     );
 };
@@ -32,7 +47,7 @@ export const stylesInput = StyleSheet.create({
     },
     inputLabel: {
         fontWeight: '600',
-        color:'rgba(0, 0, 0, 0.5)',
+        color:'rgba(0, 0, 0, 0.65)',
         fontSize: 14,
     },
     input: {
@@ -46,5 +61,10 @@ export const stylesInput = StyleSheet.create({
         color: 'rgba(0, 0, 0, 0.7)',
         height: 50,
         marginBottom: 5,
+    },
+    labelError: {
+        color: '#bf1650',
+        fontSize: 16,
+        fontWeight: '400',
     },
 });

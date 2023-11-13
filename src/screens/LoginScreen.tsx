@@ -6,17 +6,31 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Input } from '../components/Input';
 import { ButtonSubmit } from '../components/ButtonSubmit';
+import { Controller, useForm } from 'react-hook-form';
 
 
 const {height} = Dimensions.get('window');
+
+export type FormData = {
+    email: string,
+    password: string,
+}
 
 interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 export const LoginScreen = ({navigation}: Props) => {
 
     const {top} = useSafeAreaInsets();
 
-    return (
+    const { control, handleSubmit, formState:{errors} } = useForm<FormData>({defaultValues: {
+        email: '',
+        password: '',
+    }});
 
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    };
+
+    return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{flex:1, marginTop: top + 10}}
@@ -46,11 +60,30 @@ export const LoginScreen = ({navigation}: Props) => {
                         <View
                             style={{paddingHorizontal: 50, gap: 25}}
                         >
-                            <Input label="Correo electronico" placeholder="example@gmail.com" keyboardType="email-address"/>
 
-                            <Input label="Contraseña" placeholder="*********" keyboardType="default" secureText={true}/>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                }}
+                                render={({field: {onChange, value, onBlur}}) => (
+                                    <Input errors={errors.email} onBlur={onBlur} onChange={onChange} value={value} label="Correo electronico" placeholder="example@gmail.com" keyboardType="email-address"/>
+                                )}
+                                name="email"
+                            />
 
-                            <ButtonSubmit title="Iniciar sesión"/>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                }}
+                                render={({field: {onChange, value, onBlur}}) => (
+                                    <Input errors={errors.password} onBlur={onBlur} onChange={onChange} value={value} label="Contraseña" placeholder="*********" keyboardType="default" secureText={true}/>
+                                )}
+                                name="password"
+                            />
+
+                            <ButtonSubmit title="Iniciar sesión" handleSubmit={handleSubmit} onSubmit={onSubmit}/>
 
                             <View>
                                 <Text
@@ -62,7 +95,7 @@ export const LoginScreen = ({navigation}: Props) => {
                                         top:-15,
                                     }}
                                 >
-                                    ¿No tienes cuenta?
+                                    ¿No tienes una cuenta?
                                 </Text>
                             </View>
                         </View>
