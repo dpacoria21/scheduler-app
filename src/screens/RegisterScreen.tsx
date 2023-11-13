@@ -6,13 +6,28 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Input, stylesInput } from '../components/Input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonSubmit } from '../components/ButtonSubmit';
+import { Controller, useForm } from 'react-hook-form';
 
 const {height} = Dimensions.get('window');
+
+export type RegisterFormData = {
+    name: string,
+    email: string,
+    password: string,
+}
 
 interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'>{}
 export const RegisterScreen = ({navigation}: Props) => {
 
     const {top} = useSafeAreaInsets();
+
+    const {control, handleSubmit, formState: {errors}} = useForm<RegisterFormData>();
+
+    console.log(errors);
+
+    const onSubmit = (data: RegisterFormData) => {
+        console.log(data);
+    };
 
     return (
         <KeyboardAvoidingView
@@ -40,25 +55,63 @@ export const RegisterScreen = ({navigation}: Props) => {
                                     Registrate
                             </Text>
 
-                            <View style={stylesInput.inputContainer}>
-                                <Text style={stylesInput.inputLabel}>
-                                    Nombre Completo
-                                </Text>
-                                <TextInput
-                                    placeholder={'Nombre'}
-                                    placeholderTextColor={'rgba(0, 0, 0, 0.4)'}
-                                    style={stylesInput.input}
-                                    keyboardType={'default'}
-                                    autoCapitalize={'words'}
-                                    autoCorrect={false}
-                                />
-                            </View>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                }}
+                                render={({field: {onBlur, onChange, value}}) => (
+                                    <View style={stylesInput.inputContainer}>
+                                        <Text style={{
+                                            ...stylesInput.inputLabel,
+                                            color: (errors.name) ? 'rgba(191, 22, 80, 0.65)' : 'rgba(0, 0, 0, 0.4)',
+                                        }}>
+                                        Nombre Completo
+                                        </Text>
+                                        <TextInput
+                                            placeholder={'Nombre'}
+                                            placeholderTextColor={(errors.name) ? 'rgba(191, 22, 80, 0.3)' : 'rgba(0, 0, 0, 0.4)'}
+                                            style={{
+                                                ...stylesInput.input,
+                                                borderColor: (errors.name) ? '#bf1650' : 'rgba(0, 0, 0, 0.3)',
+                                            }}
+                                            keyboardType={'default'}
+                                            autoCapitalize={'words'}
+                                            autoCorrect={false}
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                        />
+                                        {errors.name && <Text style={stylesInput.labelError}>⚠ This is required</Text>}
+                                    </View>
+                                )}
+                                name="name"
+                            />
 
-                            <Input label="Correo electronico" placeholder="example@gmail.com" keyboardType="email-address"/>
 
-                            <Input label="Contraseña" placeholder="*********" keyboardType="default" secureText={true}/>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                }}
+                                render={({field: {onBlur, onChange, value}}) => (
+                                    <Input errors={errors.email} onBlur={onBlur} onChange={onChange} value={value} label="Correo electronico" placeholder="example@gmail.com" keyboardType="email-address"/>
+                                )}
+                                name="email"
+                            />
 
-                            <ButtonSubmit title="Completar registro"/>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                }}
+                                render={({field: {onBlur, onChange, value}}) => (
+                                    <Input errors={errors.password} onBlur={onBlur} onChange={onChange} value={value} label="Contraseña" placeholder="*********" keyboardType="default" secureText={true}/>
+                                )}
+                                name="password"
+                            />
+
+                            <ButtonSubmit title="Completar registro" handleSubmit={handleSubmit} onSubmit={onSubmit}/>
 
                             <View>
                                 <Text

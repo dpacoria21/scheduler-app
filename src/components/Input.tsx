@@ -35,6 +35,7 @@ export const Input = ({errors, label, placeholder, keyboardType = 'default', sec
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
+                autoCapitalize="none"
             />
             {errors && <Text style={stylesInput.labelError}>⚠ This is required</Text>}
         </View>

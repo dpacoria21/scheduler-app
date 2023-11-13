@@ -1,12 +1,11 @@
 import React from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { FormData } from '../screens/LoginScreen';
 
 interface Props {
     title: string,
-    handleSubmit: UseFormHandleSubmit<FormData, undefined>,
-    onSubmit: (data: FormData) => void,
+    handleSubmit: UseFormHandleSubmit<any, undefined>,
+    onSubmit: (data: any) => void,
 }
 
 export const ButtonSubmit = ({title, handleSubmit, onSubmit}: Props) => {

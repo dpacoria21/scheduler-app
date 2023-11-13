@@ -11,7 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 const {height} = Dimensions.get('window');
 
-export type FormData = {
+export type LoginFormData = {
     email: string,
     password: string,
 }
@@ -21,12 +21,9 @@ export const LoginScreen = ({navigation}: Props) => {
 
     const {top} = useSafeAreaInsets();
 
-    const { control, handleSubmit, formState:{errors} } = useForm<FormData>({defaultValues: {
-        email: '',
-        password: '',
-    }});
+    const { control, handleSubmit, formState:{errors} } = useForm<LoginFormData>();
 
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: LoginFormData) => {
         console.log(data);
     };
 
@@ -38,13 +35,14 @@ export const LoginScreen = ({navigation}: Props) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
                 <ScrollView showsVerticalScrollIndicator={false} style={{padding: 5}}>
+
                     <View style={{
                         height: height * 0.9,
                         justifyContent: 'center',
                         gap: 30,
                     }}>
+
                         <View style={{
-                            // flex:1,
                             alignItems: 'center',
                             paddingVertical: 5,
                         }}>
@@ -57,6 +55,7 @@ export const LoginScreen = ({navigation}: Props) => {
                                 }}
                             />
                         </View>
+
                         <View
                             style={{paddingHorizontal: 50, gap: 25}}
                         >
@@ -98,10 +97,15 @@ export const LoginScreen = ({navigation}: Props) => {
                                     ¿No tienes una cuenta?
                                 </Text>
                             </View>
+
                         </View>
+
                     </View>
+
                 </ScrollView>
+
             </TouchableWithoutFeedback>
+
         </KeyboardAvoidingView>
     );
 };
