@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { RootStackParams } from '../navigators/Navigator';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -40,12 +40,27 @@ export const RegisterScreen = ({navigation}: Props) => {
                     <View style={{
                         height: height * 0.9,
                         justifyContent: 'center',
-                        gap: 30,
+                        gap: 35,
                     }}>
+
+                        <View style={{
+                            alignItems: 'center',
+                            paddingVertical: 5,
+                        }}>
+                            <Image
+                                source={require('../assets/register.png')}
+                                resizeMode="cover"
+                                style={{
+                                    width: 280,
+                                    height: 280,
+                                }}
+                            />
+                        </View>
+
                         <View
                             style={{paddingHorizontal: 50, gap: 28}}
                         >
-                            <Text style={{
+                            {/* <Text style={{
                                 textAlign: 'center',
                                 fontSize: 40,
                                 fontWeight: '800',
@@ -53,7 +68,7 @@ export const RegisterScreen = ({navigation}: Props) => {
                                 marginBottom: 30,
                             }}>
                                     Registrate
-                            </Text>
+                            </Text> */}
 
                             <Controller
                                 control={control}

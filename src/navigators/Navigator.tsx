@@ -20,7 +20,7 @@ export const Navigator = () => {
             screenOptions={{
                 headerShown: false,
                 cardStyle: {
-                    backgroundColor: '#fff',
+                    backgroundColor: '#ebf3ff',
                 },
                 gestureEnabled: true,
                 animationEnabled: true,
