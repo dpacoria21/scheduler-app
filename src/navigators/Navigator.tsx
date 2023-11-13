@@ -19,11 +19,11 @@ export const Navigator = () => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
-                cardOverlayEnabled:true,
-                animationEnabled:true,
                 cardStyle: {
                     backgroundColor: '#fff',
                 },
+                gestureEnabled: true,
+                animationEnabled: true,
             }}
 
         >

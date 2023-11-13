@@ -15,8 +15,6 @@ export const LoginScreen = ({navigation}: Props) => {
 
     const {top} = useSafeAreaInsets();
 
-    console.log(height);
-
     return (
 
         <KeyboardAvoidingView

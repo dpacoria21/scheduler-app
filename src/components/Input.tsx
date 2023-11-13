@@ -10,22 +10,23 @@ interface Props {
 
 export const Input = ({label, placeholder, keyboardType = 'default', secureText = false}: Props) => {
     return (
-        <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>
+        <View style={stylesInput.inputContainer}>
+            <Text style={stylesInput.inputLabel}>
                 {label}
             </Text>
             <TextInput
                 placeholder={placeholder}
                 placeholderTextColor={'rgba(0, 0, 0, 0.4)'}
-                style={styles.input}
+                style={stylesInput.input}
                 keyboardType={keyboardType}
                 secureTextEntry={secureText}
+                autoCorrect={false}
             />
         </View>
     );
 };
 
-const styles = StyleSheet.create({
+export const stylesInput = StyleSheet.create({
     inputContainer: {
         gap: 7,
     },
