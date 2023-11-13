@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserResponse } from '../../interfaces/userResponseInterfaces';
 import { PayloadUser } from '../../interfaces/payloadInterfaces';
 
 export interface AuthState {
     status: 'checking' | 'authenticated' | 'not-authenticated'
-    user: UserResponse | {},
+    user: PayloadUser | {},
     errorMessage: string,
 }
 

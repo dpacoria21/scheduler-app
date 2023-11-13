@@ -5,7 +5,9 @@ export interface UserPropsLogin {
 
 export interface PayloadUser {
     email: string,
+    name: string,
     id: string,
+    roles: string[]
 }
 
 export interface UserPropsRegister {

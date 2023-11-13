@@ -8,18 +8,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonSubmit } from '../components/ButtonSubmit';
 import { Controller, useForm } from 'react-hook-form';
 import { RegisterFormData } from '../interfaces/formsData';
+import { useAppDispatch } from '../store/store';
+import { startRegister } from '../store/auth/thunks';
 
 interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'>{}
 export const RegisterScreen = ({navigation}: Props) => {
 
     const {top} = useSafeAreaInsets();
-
     const {control, handleSubmit, formState: {errors}} = useForm<RegisterFormData>();
 
-    console.log(errors);
+    const dispatch = useAppDispatch();
 
     const onSubmit = (data: RegisterFormData) => {
-        console.log(data);
+        dispatch(startRegister(data));
     };
 
     return (

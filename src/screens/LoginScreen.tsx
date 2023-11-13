@@ -7,10 +7,9 @@ import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handl
 import { Input } from '../components/Input';
 import { ButtonSubmit } from '../components/ButtonSubmit';
 import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../store/store';
 import { startLogin } from '../store/auth/thunks';
 import { LoginFormData } from '../interfaces/formsData';
+import { useAppDispatch } from '../store/store';
 
 
 const {height} = Dimensions.get('window');
@@ -18,13 +17,11 @@ const {height} = Dimensions.get('window');
 interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 export const LoginScreen = ({navigation}: Props) => {
 
-    const {user, status} = useSelector((state: RootState) =>state.auth);
     const dispatch = useAppDispatch();
 
     const {top} = useSafeAreaInsets();
     const { control, handleSubmit, formState:{errors}, reset } = useForm<LoginFormData>();
 
-    console.log({user, status});
 
     const onSubmit = (data: LoginFormData) => {
         dispatch(startLogin(data));

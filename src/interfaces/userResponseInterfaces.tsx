@@ -1,10 +1,10 @@
-export interface UserResponse  {
-    id: string,
-    email: string,
-    token: string,
+export interface UserLoginResponse {
+    email: string;
+    id:    string;
+    roles: string[];
+    token: string;
 }
-
-export interface UserRegisterResponse {
+export interface UserResponse {
     name:  string;
     email: string;
     id:    string;

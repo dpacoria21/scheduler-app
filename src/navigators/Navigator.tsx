@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
 import { CalendarScreen } from '../screens/CalendarScreen';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState, useAppDispatch } from '../store/store';
+import { checkingAuthToken } from '../store/auth/thunks';
 
 
 export type RootStackParams = {
@@ -19,6 +20,12 @@ const Stack = createStackNavigator<RootStackParams>();
 export const Navigator = () => {
 
     const {status} = useSelector((state: RootState) => state.auth);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(checkingAuthToken());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Stack.Navigator
