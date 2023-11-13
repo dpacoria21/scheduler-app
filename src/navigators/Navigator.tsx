@@ -19,7 +19,13 @@ export const Navigator = () => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
+                cardOverlayEnabled:true,
+                animationEnabled:true,
+                cardStyle: {
+                    backgroundColor: '#fff',
+                },
             }}
+
         >
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />

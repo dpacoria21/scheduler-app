@@ -6,7 +6,7 @@ module.exports = {
             'error',
             4,
         ],
-        'linebreak-style': 0,
+        'react-native/no-inline-styles': 0,
         'quotes': [
             'error',
             'single',
