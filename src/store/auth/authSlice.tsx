@@ -1,8 +1,10 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { UserResponse } from '../../interfaces/userResponseInterfaces';
+import { PayloadUser } from '../../interfaces/payloadInterfaces';
 
 export interface AuthState {
     status: 'checking' | 'authenticated' | 'not-authenticated'
-    user: {},
+    user: UserResponse | {},
     errorMessage: string,
 }
 
@@ -16,8 +18,7 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        onLogin: (state, {payload} : {payload: PayloadAction<Object>}) => {
-            console.log(payload);
+        onLogin: (state, {payload} : {payload: PayloadUser}) => {
             state.user = payload;
             state.errorMessage = '';
             state.status = 'authenticated';

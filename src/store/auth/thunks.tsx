@@ -1,21 +1,27 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import { onChecking, onLogin } from './authSlice';
+import { UserPropsLogin } from '../../interfaces/payloadInterfaces';
+import { schedulerApi } from '../../api/schedulerApi';
+import { UserResponse } from '../../interfaces/userResponseInterfaces';
 
-interface PayloadLogin {
-    email: string,
-    password: string,
-}
-
-
-export const startLogin = ({email, password} : PayloadLogin) => {
+export const startLogin = ({email, password} : UserPropsLogin) => {
     return async(dispatch: Dispatch) => {
-        dispatch(onChecking());
 
-        //Hacer llamado a la API para traer la informacion
+        try {
 
-        //Guardar el token con el asyncStorage
+            dispatch(onChecking());
+            const {data} = await schedulerApi.post<UserResponse>('/auth/login', {
+                email,
+                password,
+            });
 
-        dispatch(onLogin({payload: {email, password}, type: 'auth/onLogin'}));
+            //Guardar el token con el asyncStorage
+
+            dispatch(onLogin({email: data.email, id: data.id}));
+        } catch (err) {
+            console.log(err);
+        }
+
     };
 };
 

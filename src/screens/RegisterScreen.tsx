@@ -7,12 +7,7 @@ import { Input, stylesInput } from '../components/Input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonSubmit } from '../components/ButtonSubmit';
 import { Controller, useForm } from 'react-hook-form';
-
-export type RegisterFormData = {
-    name: string,
-    email: string,
-    password: string,
-}
+import { RegisterFormData } from '../interfaces/formsData';
 
 interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'>{}
 export const RegisterScreen = ({navigation}: Props) => {
