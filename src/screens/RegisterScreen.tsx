@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { RootStackParams } from '../navigators/Navigator';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,8 +7,6 @@ import { Input, stylesInput } from '../components/Input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonSubmit } from '../components/ButtonSubmit';
 import { Controller, useForm } from 'react-hook-form';
-
-const {height} = Dimensions.get('window');
 
 export type RegisterFormData = {
     name: string,
@@ -33,12 +31,13 @@ export const RegisterScreen = ({navigation}: Props) => {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{flex:1, marginTop: top + 10}}
+            enabled={true}
         >
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView showsVerticalScrollIndicator={false} style={{padding: 5}}>
                     <View style={{
-                        height: height * 0.9,
+                        flex:1,
                         justifyContent: 'center',
                         gap: 35,
                     }}>
@@ -51,21 +50,21 @@ export const RegisterScreen = ({navigation}: Props) => {
                                 source={require('../assets/register.png')}
                                 resizeMode="cover"
                                 style={{
-                                    width: 280,
-                                    height: 280,
+                                    width: 250,
+                                    height: 250,
                                 }}
                             />
                         </View>
 
                         <View
-                            style={{paddingHorizontal: 50, gap: 28}}
+                            style={{paddingHorizontal: 50, gap: 25}}
                         >
                             {/* <Text style={{
                                 textAlign: 'center',
                                 fontSize: 40,
                                 fontWeight: '800',
                                 color: '#353535',
-                                marginBottom: 30,
+                                // marginBottom: 30,
                             }}>
                                     Registrate
                             </Text> */}
