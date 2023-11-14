@@ -1,5 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import { onChecking, onLogin, onLogout } from './authSlice';
+import { addErrorMessage, onChecking, onLogin, onLogout } from './authSlice';
 
 import { schedulerApi } from '../../api/schedulerApi';
 
@@ -30,23 +30,22 @@ export const checkingAuthToken = () => {
 export const startLogin = ({email, password} : UserPropsLogin) => {
     return async(dispatch: Dispatch) => {
 
-        dispatch(onChecking());
         try {
 
             const {data: {token}} = await schedulerApi.post<UserLoginResponse>('/auth/login', {
                 email,
                 password,
             });
-
+            dispatch(onChecking());
             const data = await getUserWithToken(token);
 
             //Guardar el token con el asyncStorage
             await AsyncStorage.setItem('token', data.token);
 
             dispatch(onLogin({name:data.name, email: data.email, id: data.id, roles: data.roles}));
-        } catch (error) {
+        } catch (error: any) {
             await AsyncStorage.clear();
-            dispatch(onLogout());
+            dispatch(addErrorMessage(error.response.data.message));
         }
 
     };
@@ -56,7 +55,6 @@ export const startLogin = ({email, password} : UserPropsLogin) => {
 export const startRegister = ({name, email, password}: UserPropsRegister) => {
     return async(dispatch: Dispatch) => {
 
-        dispatch(onChecking());
         try {
 
             const {data} = await schedulerApi.post<UserResponse>('/auth/register', {
@@ -64,15 +62,16 @@ export const startRegister = ({name, email, password}: UserPropsRegister) => {
                 email,
                 password,
             });
+            dispatch(onChecking());
 
             //Guardar el token con el asyncStorage
             await AsyncStorage.setItem('token', data.token);
 
             dispatch(onLogin({name:data.name, email: data.email, id: data.id, roles: data.roles}));
 
-        } catch (error) {
+        } catch (error: any) {
             await AsyncStorage.clear();
-            dispatch(onLogout());
+            dispatch(addErrorMessage(error.response.data.message));
         }
     };
 };

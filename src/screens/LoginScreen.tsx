@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React from 'react';
-import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Alert, Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { RootStackParams } from '../navigators/Navigator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -9,7 +9,9 @@ import { ButtonSubmit } from '../components/ButtonSubmit';
 import { Controller, useForm } from 'react-hook-form';
 import { startLogin } from '../store/auth/thunks';
 import { LoginFormData } from '../interfaces/formsData';
-import { useAppDispatch } from '../store/store';
+import { RootState, useAppDispatch } from '../store/store';
+import { useSelector } from 'react-redux';
+import { clearErrorMessage } from '../store/auth/authSlice';
 
 
 const {height} = Dimensions.get('window');
@@ -17,16 +19,27 @@ const {height} = Dimensions.get('window');
 interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 export const LoginScreen = ({navigation}: Props) => {
 
+    const {errorMessage} = useSelector((state: RootState) => state.auth);
     const dispatch = useAppDispatch();
 
     const {top} = useSafeAreaInsets();
-    const { control, handleSubmit, formState:{errors}, reset } = useForm<LoginFormData>();
+    const { control, handleSubmit, formState:{errors} } = useForm<LoginFormData>();
 
+    useEffect(() => {
+        if (errorMessage.length === 0) {return;}
+
+        Alert.alert('Login incorrecto', errorMessage.reduce((prev, curr, i) => `${prev}${i + 1}. ${curr}.\n\n`, '').trimEnd(), [{
+            text: 'Ok',
+            onPress: () => dispatch(clearErrorMessage()),
+        }]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [errorMessage]);
 
     const onSubmit = (data: LoginFormData) => {
         dispatch(startLogin(data));
-        reset();
+        // reset();
     };
+
 
     return (
         <KeyboardAvoidingView

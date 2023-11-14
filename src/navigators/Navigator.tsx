@@ -3,17 +3,17 @@ import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
-import { CalendarScreen } from '../screens/CalendarScreen';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { checkingAuthToken } from '../store/auth/thunks';
 import { LoadingScreen } from '../screens/LoadingScreen';
+import { SchedulerNavigator } from './ScheduleNavigator';
 
 
 export type RootStackParams = {
     LoginScreen: undefined,
     RegisterScreen: undefined,
-    CalendarScreen: undefined,
+    SchedulerNavigator: undefined,
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -49,7 +49,7 @@ export const Navigator = () => {
                         <Stack.Screen name="LoginScreen" component={LoginScreen} />
                         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                     </>
-                    :   <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
+                    :   <Stack.Screen name="SchedulerNavigator" component={SchedulerNavigator} />
             }
         </Stack.Navigator>
     );
