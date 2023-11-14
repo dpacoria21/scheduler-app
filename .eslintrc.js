@@ -17,5 +17,6 @@ module.exports = {
         ],
         'prettier/prettier': 0,
         '@typescript-eslint/no-empty-interface': 'off',
+        'react/no-unstable-nested-components': 0,
     },
 };

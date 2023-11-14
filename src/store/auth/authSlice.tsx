@@ -3,13 +3,20 @@ import { PayloadUser } from '../../interfaces/payloadInterfaces';
 
 export interface AuthState {
     status: 'checking' | 'authenticated' | 'not-authenticated'
-    user: PayloadUser | {},
+    user: PayloadUser,
     errorMessage: string[],
 }
 
+const initialUser: PayloadUser = {
+    name: '',
+    id: '',
+    email: '',
+    roles: [],
+};
+
 const initialState: AuthState = {
     status: 'not-authenticated',
-    user: {},
+    user: initialUser,
     errorMessage: [],
 };
 
@@ -23,17 +30,17 @@ export const authSlice = createSlice({
             state.status = 'authenticated';
         },
         onLogout: (state) => {
-            state.user = {};
+            state.user = initialUser;
             state.errorMessage = [];
             state.status = 'not-authenticated';
         },
         onChecking: (state) => {
             state.status = 'checking';
-            state.user = {};
+            state.user = initialUser;
             state.errorMessage = [];
         },
         addErrorMessage: (state, {payload}: PayloadAction<string[]> ) => {
-            state.user = {};
+            state.user = initialUser;
             state.status = 'not-authenticated';
             state.errorMessage = payload;
         },

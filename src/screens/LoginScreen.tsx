@@ -26,18 +26,29 @@ export const LoginScreen = ({navigation}: Props) => {
     const { control, handleSubmit, formState:{errors} } = useForm<LoginFormData>();
 
     useEffect(() => {
+
         if (errorMessage.length === 0) {return;}
 
-        Alert.alert('Login incorrecto', errorMessage.reduce((prev, curr, i) => `${prev}${i + 1}. ${curr}.\n\n`, '').trimEnd(), [{
-            text: 'Ok',
-            onPress: () => dispatch(clearErrorMessage()),
-        }]);
+        let mensaje = '';
+
+        if (Array.isArray(errorMessage)) {
+            mensaje = errorMessage.reduce((prev, curr, i) => `${prev}${i + 1}. ${curr}.\n\n`, '').trimEnd();
+        } else {
+            mensaje = errorMessage;
+        }
+
+        Alert.alert('Login incorrecto', mensaje ,
+            [{
+                text: 'Ok',
+                onPress: () => dispatch(clearErrorMessage()),
+            }]
+        );
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [errorMessage]);
 
     const onSubmit = (data: LoginFormData) => {
         dispatch(startLogin(data));
-        // reset();
     };
 
 
