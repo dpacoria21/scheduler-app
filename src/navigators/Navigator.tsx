@@ -7,6 +7,7 @@ import { CalendarScreen } from '../screens/CalendarScreen';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { checkingAuthToken } from '../store/auth/thunks';
+import { LoadingScreen } from '../screens/LoadingScreen';
 
 
 export type RootStackParams = {
@@ -26,6 +27,8 @@ export const Navigator = () => {
         dispatch(checkingAuthToken());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    if (status === 'checking') {return <LoadingScreen />;}
 
     return (
         <Stack.Navigator

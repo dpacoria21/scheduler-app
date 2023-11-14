@@ -11,6 +11,7 @@ import { UserLoginResponse, UserResponse } from '../../interfaces/userResponseIn
 
 export const checkingAuthToken = () => {
     return async(dispatch: Dispatch) => {
+        dispatch(onChecking());
         const token = await AsyncStorage.getItem('token');
         if (!token) {return dispatch(onLogout());}
 
