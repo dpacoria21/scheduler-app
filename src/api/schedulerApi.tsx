@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export const schedulerApi = axios.create({
@@ -5,3 +6,14 @@ export const schedulerApi = axios.create({
     timeout: 1000,
     withCredentials: true,
 });
+
+
+schedulerApi.interceptors.request.use(
+    async(config) => {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    }
+);
