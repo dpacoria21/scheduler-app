@@ -97,6 +97,7 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
                     {
                         Screens.map((screen) => (
                             <MenuItem
+                                key={screen.title}
                                 title={screen.title}
                                 icon={screen.icon}
                                 component={screen.component}
