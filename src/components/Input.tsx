@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardTypeOptions, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
 
 interface Props {
     label: string,
@@ -9,10 +9,11 @@ interface Props {
     onChange: () => void,
     onBlur: () => void,
     value: string,
-    errors?: object
+    errors?: object,
+    style?: StyleProp<ViewStyle>
 }
 
-export const Input = ({errors, label, placeholder, keyboardType = 'default', secureText = false, onChange, onBlur, value}: Props) => {
+export const Input = ({style, errors, label, placeholder, keyboardType = 'default', secureText = false, onChange, onBlur, value}: Props) => {
 
     return (
         <View style={stylesInput.inputContainer}>
@@ -28,6 +29,7 @@ export const Input = ({errors, label, placeholder, keyboardType = 'default', sec
                 style={{
                     ...stylesInput.input,
                     borderColor: (errors) ? '#bf1650' : 'rgba(0, 0, 0, 0.3)',
+                    ...style as any,
                 }}
                 keyboardType={keyboardType}
                 secureTextEntry={secureText}

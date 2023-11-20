@@ -8,19 +8,48 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { MenuItem } from '../components/MenuItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { CreateEventScreen } from '../screens/CreateEventScreen';
+import { TodosScreen } from '../screens/TodosScreen';
+
+interface ItemScreen {
+    title: string,
+    icon: string,
+    component: string,
+}
+
+const Screens: ItemScreen[] = [
+    {
+        title: 'Calendario',
+        icon: 'calendar-outline',
+        component: 'SchedulerScreen',
+    },
+    {
+        title: 'Todos',
+        icon: 'school-outline',
+        component: 'TodosScreen',
+    },
+    {
+        title: 'About',
+        icon: 'people-outline',
+        component: 'AboutScreen',
+    },
+];
 
 const Drawer = createDrawerNavigator();
 
 export const SchedulerNavigator = () => {
     return (
         <Drawer.Navigator
+            initialRouteName="SchedulerScreen"
             screenOptions={{
                 drawerStatusBarAnimation: 'fade',
             }}
             drawerContent={(props) => <MenuInterno {...props}/>}
         >
-            <Drawer.Screen name="AboutScreen" component={AboutScreen} />
             <Drawer.Screen name="SchedulerScreen" component={SchedulerScreen} />
+            <Drawer.Screen name="AboutScreen" component={AboutScreen} />
+            <Drawer.Screen name="TodosScreen"  component={TodosScreen} />
+            <Drawer.Screen name="CreateEventScreen"  component={CreateEventScreen} />
         </Drawer.Navigator>
     );
 };
@@ -31,7 +60,7 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
     const {navigation} = props;
 
     return (
-        <DrawerContentScrollView style={{backgroundColor: '#e2e2e2'}}>
+        <DrawerContentScrollView  style={{backgroundColor: '#e2e2e2'}}>
             <View
                 style={styles.container}
             >
@@ -65,18 +94,17 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
                 <View style={{
                     gap: 10,
                 }}>
+                    {
+                        Screens.map((screen) => (
+                            <MenuItem
+                                title={screen.title}
+                                icon={screen.icon}
+                                component={screen.component}
+                            />
+                        ))
+                    }
                     <MenuItem
-                        text="Calendario"
-                        icon="calendar-outline"
-                        componente="SchedulerScreen"
-                    />
-                    <MenuItem
-                        text="About"
-                        icon="people-outline"
-                        componente="AboutScreen"
-                    />
-                    <MenuItem
-                        text="Logout"
+                        title="Logout"
                         icon="log-out-outline"
                     />
                 </View>

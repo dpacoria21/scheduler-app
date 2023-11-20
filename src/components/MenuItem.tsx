@@ -7,12 +7,12 @@ import { useAppDispatch } from '../store/store';
 import { startLogout } from '../store/auth/thunks';
 
 interface Props {
-    text: string,
+    title: string,
     icon: string,
-    componente?: string,
+    component?: string,
 }
 
-export const MenuItem = ({text, icon, componente = ''}: Props) => {
+export const MenuItem = ({title, icon, component = ''}: Props) => {
 
     const dispatch = useAppDispatch();
     const {navigate} = useNavigation();
@@ -21,8 +21,8 @@ export const MenuItem = ({text, icon, componente = ''}: Props) => {
         <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
-                if (componente) {
-                    navigate(componente as never);
+                if (component) {
+                    navigate(component as never);
                 } else {
                     dispatch(startLogout());
                 }
@@ -48,7 +48,7 @@ export const MenuItem = ({text, icon, componente = ''}: Props) => {
                     fontWeight: '600',
                     color: '#252525',
                 }}>
-                    {text}
+                    {title}
                 </Text>
             </View>
         </TouchableOpacity>
