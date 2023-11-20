@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PayloadUser } from '../../interfaces/payloadInterfaces';
+import { UserStore } from '../../interfaces/storeInterfaces';
 
 export interface AuthState {
     status: 'checking' | 'authenticated' | 'not-authenticated'
-    user: PayloadUser,
+    user: UserStore,
     errorMessage: string[],
 }
 
-const initialUser: PayloadUser = {
+const initialUser: UserStore = {
     name: '',
     id: '',
     email: '',
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        onLogin: (state, {payload} : {payload: PayloadUser}) => {
+        onLogin: (state, {payload} : {payload: UserStore}) => {
             state.user = payload;
             state.errorMessage = [];
             state.status = 'authenticated';

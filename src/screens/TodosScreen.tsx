@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
 import { FlatList, Swipeable } from 'react-native-gesture-handler';
-
-interface Todo {
-    id: string,
-    description: string,
-    done: boolean,
-}
+import { Todo } from '../interfaces/storeInterfaces';
 
 const todosMock: Todo[] = [
     {

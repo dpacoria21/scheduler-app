@@ -3,13 +3,6 @@ export interface UserPropsLogin {
     password: string,
 }
 
-export interface PayloadUser {
-    email: string,
-    name: string,
-    id: string,
-    roles: string[]
-}
-
 export interface UserPropsRegister {
     name: string,
     email: string,
