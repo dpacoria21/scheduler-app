@@ -5,6 +5,7 @@ export interface UserStore {
     roles: string[]
 }
 
+
 export interface Event {
     id:          string;
     title:       string;
@@ -14,6 +15,7 @@ export interface Event {
     todos:       Todo[];
     activeTodo: Todo | null;
 }
+
 
 export interface Todo {
     id:          string;

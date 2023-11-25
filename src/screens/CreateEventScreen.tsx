@@ -8,6 +8,8 @@ import { DateInput } from '../components/DateInput';
 import { ButtonSubmit } from '../components/ButtonSubmit';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useAppDispatch } from '../store/store';
+import { startCreateEvent } from '../store/calendar/thunks';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -15,6 +17,8 @@ export const CreateEventScreen = () => {
 
     const {navigate} = useNavigation();
     const {top} = useSafeAreaInsets();
+
+    const dispatch = useAppDispatch();
 
     const { control, handleSubmit, reset, formState:{errors}, watch} = useForm<SubmitEvent>({defaultValues: {
         title: '',
@@ -24,7 +28,8 @@ export const CreateEventScreen = () => {
     }});
 
     const onSubmit = (data: SubmitEvent) => {
-        console.log(data);
+
+        dispatch(startCreateEvent(data));
         reset({
             title: '',
             description: '',
@@ -32,6 +37,7 @@ export const CreateEventScreen = () => {
             end: addHours(new Date(), 2).toISOString(),
         });
         navigate('SchedulerScreen' as never);
+
     };
 
     return (

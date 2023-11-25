@@ -5,6 +5,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAppDispatch } from '../store/store';
 import { startLogout } from '../store/auth/thunks';
+import { onLogoutCalendar } from '../store/calendar/calendarSlice';
 
 interface Props {
     title: string,
@@ -25,6 +26,7 @@ export const MenuItem = ({title, icon, component = ''}: Props) => {
                     navigate(component as never);
                 } else {
                     dispatch(startLogout());
+                    dispatch(onLogoutCalendar());
                 }
             }}
             style={{

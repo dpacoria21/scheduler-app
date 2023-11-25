@@ -1,94 +1,82 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
-import { FlatList, Swipeable } from 'react-native-gesture-handler';
+
 import { Todo } from '../interfaces/storeInterfaces';
 
-const todosMock: Todo[] = [
-    {
-        id: '1',
-        description: 'Hacer tarea de Matematica',
-        done: false,
-    },
-    {
-        id: '2',
-        description: 'Hacer tarea de Comunicacion',
-        done: false,
-    },
-    {
-        id: '3',
-        description: 'Hacer tarea de Ciencias',
-        done: false,
-    },
-    {
-        id: '4',
-        description: 'Hacer tarea de Fisica',
-        done: false,
-    },
-    {
-        id: '5',
-        description: 'Hacer tarea de Calculo',
-        done: false,
-    },
-    {
-        id: '6',
-        description: 'Hacer tarea de Calculo',
-        done: false,
-    },
-    {
-        id: '7',
-        description: 'Hacer tarea de Calculo',
-        done: false,
-    },
-    {
-        id: '8',
-        description: 'Hacer tarea de Calculo',
-        done: false,
-    },
-];
+import { FlatList, Swipeable } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
+import CheckBox from '@react-native-community/checkbox';
 
 interface Props {
-    todo: Todo
+    todo: Todo,
+    todos: Todo[],
+    deleteFn: Dispatch<SetStateAction<{ id: string; description: string; done: boolean; }[]>>
 }
 
 const rightSwipeActions = () => {
     return (
         <View
             style={{
-                backgroundColor: 'red',
+                // backgroundColor: 'red',
+                // marginRight: 15,
                 justifyContent: 'center',
                 alignItems: 'flex-end',
             }}
         >
-            <Text
+            <Icon
+                name="trash-outline"
+                size={30}
+                color={'red'}
                 style={{
-                    color: '#1b1a17',
-                    fontWeight: '600',
-                    paddingHorizontal: 30,
-                    paddingVertical:0,
+                    paddingHorizontal: 40,
                 }}
-            >
-                Delete
-            </Text>
+            />
         </View>
     );
 };
 
-const ListItem = ({todo}: Props) => {
+const ListItem = ({todo, deleteFn, todos}: Props) => {
 
     const [value, setValue] = useState(todo.description);
-
-    console.log(value);
+    const [checkValue, setCheckValue] = useState(true);
 
     return (
         <Swipeable
-            // activeOffsetX={200}
-            onSwipeableOpen={(direction, swipeable) => console.log({direction, swipeable})}
+            onSwipeableOpen={() => {
+                deleteFn(todos.filter((todoMock) => todoMock.id !== todo.id));
+            }}
             renderRightActions={rightSwipeActions}
-            containerStyle={{backgroundColor: 'red'}}
+            containerStyle={{
+                backgroundColor: '#fda4a4',
+                marginHorizontal: 15,
+                borderRadius: 5,
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 1,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+
+                elevation: 3,
+            }}
         >
             <View style={styles.todoContainer}>
+                <CheckBox
+                    disabled={false}
+                    value={checkValue}
+                    onValueChange={setCheckValue}
+                    boxType="circle"
+                />
                 <TextInput
-                    style={{color: '#fff', paddingLeft: 0, paddingVertical: 16, width: '75%'}}
+                    style={{
+                        color: `${checkValue ? '#fff' : '#ddd'}`,
+                        paddingLeft: 0,
+                        paddingVertical: 16,
+                        width: '60%',
+                        fontSize: 16,
+                        textDecorationLine: `${checkValue ? 'none' : 'line-through'}`,
+                    }}
                     autoCorrect={false}
                     multiline
                     onChangeText={(text) => setValue(text)}
@@ -102,20 +90,65 @@ const ListItem = ({todo}: Props) => {
 };
 
 export const TodosScreen = () => {
+
+    const [todos, setTodos] = useState([
+        {
+            id: '1',
+            description: 'Hacer tarea de Matematica',
+            done: false,
+        },
+        {
+            id: '2',
+            description: 'Hacer tarea de Comunicacion',
+            done: false,
+        },
+        {
+            id: '3',
+            description: 'Hacer tarea de Ciencias',
+            done: false,
+        },
+        {
+            id: '4',
+            description: 'Hacer tarea de Fisica',
+            done: false,
+        },
+        {
+            id: '5',
+            description: 'Hacer tarea de Calculo',
+            done: false,
+        },
+        {
+            id: '6',
+            description: 'Hacer tarea de Calculo',
+            done: false,
+        },
+        {
+            id: '7',
+            description: 'Hacer tarea de Calculo',
+            done: false,
+        },
+        {
+            id: '8',
+            description: 'Hacer tarea de Calculo',
+            done: false,
+        },
+    ]);
+
     return (
         <View style={{
             flex:1,
             backgroundColor: '#edf7ff',
         }}>
             <Text style={{textAlign: 'center', marginVertical: 15}}>
-                Todos mostrar Aqui
+                Mis tareas
             </Text>
 
             <FlatList
-                data={todosMock}
+                style={{flex:1}}
+                data={todos}
                 keyExtractor={(item) => item.id}
-                renderItem={({item}) => <ListItem todo={item}/>}
-                // ItemSeparatorComponent={() => <View style={{borderWidth:1, borderColor: '#000'}}/>}
+                renderItem={({item}) => <ListItem deleteFn={setTodos} todos={todos}  todo={item}/>}
+                ItemSeparatorComponent={() => <View style={{height: 25}}/>}
             />
         </View>
     );
@@ -123,7 +156,14 @@ export const TodosScreen = () => {
 
 const styles = StyleSheet.create({
     todoContainer: {
-        backgroundColor: '#2053d5',
+        backgroundColor: '#3e44ff',
+        // marginHorizontal: 15,
+        borderRadius: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 25,
+        // justifyContent: 'center',
+        gap: 10,
         // flex: 1,
         // paddingHorizontal: 10,
         // paddingVertical: 8,
