@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { startLoadEvents } from '../store/calendar/thunks';
 
 import { Agenda } from 'react-native-calendars';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { Dates, convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
 import { EmptyDateData } from '../components/EmptyDateData';
 import { DateDataItem } from '../components/DateDataItem';
+import { FloatButton } from '../components/FloatButton';
 
 interface Props extends DrawerScreenProps<any, any>{}
 export const SchedulerScreen = ({navigation}: Props) => {
 
-    const {navigate} = navigation;
+    const {events, isLoading, activeEvent} = useSelector((state: RootState) => state.calendar);
 
-    const {events, isLoading} = useSelector((state: RootState) => state.calendar);
     const [currentEvents, setCurrentEvents] = useState<Dates>();
     const dispatch = useAppDispatch();
+
+    const navigateToAddEvent = () => {
+        navigation.navigate('CreateEventScreen');
+    };
+
+    const deleteEvent = () => {
+
+    };
 
     useEffect(() => {
         dispatch(startLoadEvents());
@@ -46,7 +53,7 @@ export const SchedulerScreen = ({navigation}: Props) => {
                         <Agenda
                             showOnlySelectedDayItems
                             items={currentEvents}
-                            renderItem={DateDataItem}
+                            renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
                             renderEmptyData={EmptyDateData}
                             // scrollEnabled
                             selected={new Date().toDateString()}
@@ -57,30 +64,12 @@ export const SchedulerScreen = ({navigation}: Props) => {
                     )
             }
 
+            <FloatButton style={{position: 'absolute', bottom: 35, right: 35}} icon="add-outline" color="#202020" fn={navigateToAddEvent}/>
 
+            {
+                activeEvent && (<FloatButton style={{position: 'absolute', bottom: 35, left: 35}} icon="trash-outline" color="#ff2929" fn={deleteEvent}/>)
+            }
 
-            <View style={{position: 'absolute', bottom: 35, right: 35}}>
-                <TouchableOpacity activeOpacity={0.7} onPress={() => navigate('CreateEventScreen')}>
-                    <Icon
-                        name="add-outline"
-                        size={50}
-                        color={'#101010'}
-                        style={{
-                            backgroundColor: '#fff',
-                            borderRadius: 100,
-                            shadowColor: '#000',
-                            shadowOffset: {
-                                width: 0,
-                                height: 2,
-                            },
-                            shadowOpacity: 0.25,
-                            shadowRadius: 3.84,
-
-                            elevation: 5,
-                        }}
-                    />
-                </TouchableOpacity>
-            </View>
         </View>
     );
 };
