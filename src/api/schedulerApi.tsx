@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {API_URL} from '@env';
+import {API_KEY} from '@env';
 
 export const schedulerApi = axios.create({
-    baseURL: API_URL,
+    baseURL: API_KEY,
     withCredentials: true,
 });
 
