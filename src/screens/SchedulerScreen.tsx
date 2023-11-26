@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { View } from 'react-native';
 
@@ -11,7 +11,7 @@ import { RootState, useAppDispatch } from '../store/store';
 import { startLoadEvents } from '../store/calendar/thunks';
 
 import { Agenda } from 'react-native-calendars';
-import { Dates, convertDates } from '../helpers/convertDates';
+import { convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
 
 interface Props extends DrawerScreenProps<any, any>{}
@@ -19,7 +19,7 @@ export const SchedulerScreen = ({navigation}: Props) => {
 
     const {events, isLoading, activeEvent} = useSelector((state: RootState) => state.calendar);
 
-    const [currentEvents, setCurrentEvents] = useState<Dates>();
+    // const [currentEvents, setCurrentEvents] = useState<Dates>();
     const dispatch = useAppDispatch();
 
     const navigateToAddEvent = () => {
@@ -35,11 +35,6 @@ export const SchedulerScreen = ({navigation}: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        const dates = convertDates(events);
-        setCurrentEvents(dates);
-    }, [events]);
-
     return (
         <View style={{
             flex:1,
@@ -53,7 +48,7 @@ export const SchedulerScreen = ({navigation}: Props) => {
                     (
                         <Agenda
                             showOnlySelectedDayItems
-                            items={currentEvents}
+                            items={convertDates(events)}
                             renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
                             renderEmptyData={EmptyDateData}
                             // scrollEnabled

@@ -14,8 +14,8 @@ export const DateDataItem = ({event}: Props) => {
     const dispatch = useAppDispatch();
 
     const getFormatHourTime = (timeUTC: string): string => {
-        const hour = new Date(timeUTC).toLocaleTimeString('pe').split(' ');
-        return `${hour[0].slice(0,-3)}${hour[1]}`;
+        const hour = new Date(timeUTC).toLocaleTimeString('pe');
+        return `${hour.slice(0, -5)}${hour.slice(-3)}`;
     };
 
     const setActiveEvent = () => {
@@ -25,7 +25,7 @@ export const DateDataItem = ({event}: Props) => {
     return (
         <TouchableOpacity activeOpacity={0.8} style={styles.container} onPress={setActiveEvent}>
             <View style={{gap: 3}}>
-                <Text style={styles.hour}>
+                <Text style={styles.hour} numberOfLines={1}>
                     {`${getFormatHourTime(event.start)} - ${getFormatHourTime(event.end)}`}
                 </Text>
                 <Text style={styles.title} numberOfLines={1}>
