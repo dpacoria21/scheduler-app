@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { View } from 'react-native';
 
+import { EmptyDateData } from '../components/EmptyDateData';
+import { DateDataItem } from '../components/DateDataItem';
+import { FloatButton } from '../components/FloatButton';
+
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { startLoadEvents } from '../store/calendar/thunks';
@@ -9,9 +13,6 @@ import { startLoadEvents } from '../store/calendar/thunks';
 import { Agenda } from 'react-native-calendars';
 import { Dates, convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
-import { EmptyDateData } from '../components/EmptyDateData';
-import { DateDataItem } from '../components/DateDataItem';
-import { FloatButton } from '../components/FloatButton';
 
 interface Props extends DrawerScreenProps<any, any>{}
 export const SchedulerScreen = ({navigation}: Props) => {
@@ -59,7 +60,7 @@ export const SchedulerScreen = ({navigation}: Props) => {
                             selected={new Date().toDateString()}
                             minDate="2018-01-01"
                             onDayPress={() => {}}
-                            onDayLongPress={() => {}}
+                            onDayLongPress={(date) => navigation.navigate('SchedulerDayViewScreen', {date})}
                         />
                     )
             }

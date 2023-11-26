@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { CreateEventScreen } from '../screens/CreateEventScreen';
 import { TodosScreen } from '../screens/TodosScreen';
+import { DateData } from 'react-native-calendars';
+import { SchedulerDayViewScreen } from '../screens/SchedulerDayViewScreen';
 
 interface ItemScreen {
     title: string,
@@ -24,6 +26,11 @@ const Screens: ItemScreen[] = [
         component: 'SchedulerScreen',
     },
     {
+        title: 'Day',
+        icon: 'calendar-number-outline',
+        component: 'SchedulerDayViewScreen',
+    },
+    {
         title: 'Todos',
         icon: 'school-outline',
         component: 'TodosScreen',
@@ -35,7 +42,16 @@ const Screens: ItemScreen[] = [
     },
 ];
 
-const Drawer = createDrawerNavigator();
+export type RootStackParams = {
+    SchedulerScreen: undefined,
+    AboutScreen: undefined,
+    TodosScreen: undefined,
+    CreateEventScreen: undefined,
+    SchedulerDayViewScreen: {date: DateData}
+}
+
+
+const Drawer = createDrawerNavigator<RootStackParams>();
 
 export const SchedulerNavigator = () => {
     return (
@@ -50,6 +66,7 @@ export const SchedulerNavigator = () => {
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
             <Drawer.Screen name="TodosScreen"  component={TodosScreen} />
             <Drawer.Screen name="CreateEventScreen"  component={CreateEventScreen} />
+            <Drawer.Screen name="SchedulerDayViewScreen"  component={SchedulerDayViewScreen} />
         </Drawer.Navigator>
     );
 };

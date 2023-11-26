@@ -12,15 +12,11 @@ import { LoginFormData } from '../interfaces/formsData';
 import { RootState, useAppDispatch } from '../store/store';
 import { useSelector } from 'react-redux';
 import { clearErrorMessage } from '../store/auth/authSlice';
-import { API_KEY } from '@env'; '@env';
-
 
 const {height} = Dimensions.get('window');
 
 interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'>{}
 export const LoginScreen = ({navigation}: Props) => {
-
-    console.log(API_KEY);
 
     const {errorMessage} = useSelector((state: RootState) => state.auth);
     const dispatch = useAppDispatch();
