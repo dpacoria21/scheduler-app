@@ -12,6 +12,7 @@ import { CreateEventScreen } from '../screens/CreateEventScreen';
 import { TodosScreen } from '../screens/TodosScreen';
 import { DateData } from 'react-native-calendars';
 import { SchedulerDayViewScreen } from '../screens/SchedulerDayViewScreen';
+import { SchedulerWeekViewScreen } from '../screens/SchedulerWeekViewScreen';
 
 interface ItemScreen {
     title: string,
@@ -24,6 +25,11 @@ const Screens: ItemScreen[] = [
         title: 'Calendario',
         icon: 'calendar-outline',
         component: 'SchedulerScreen',
+    },
+    {
+        title: 'Week',
+        icon: 'calendar-clear-outline',
+        component: 'SchedulerWeekViewScreen',
     },
     {
         title: 'Day',
@@ -48,6 +54,7 @@ export type RootStackParams = {
     TodosScreen: undefined,
     CreateEventScreen: undefined,
     SchedulerDayViewScreen: {date: DateData}
+    SchedulerWeekViewScreen: undefined,
 }
 
 
@@ -67,6 +74,7 @@ export const SchedulerNavigator = () => {
             <Drawer.Screen name="TodosScreen"  component={TodosScreen} />
             <Drawer.Screen name="CreateEventScreen"  component={CreateEventScreen} />
             <Drawer.Screen name="SchedulerDayViewScreen" options={{unmountOnBlur: true}} component={SchedulerDayViewScreen} />
+            <Drawer.Screen name="SchedulerWeekViewScreen" component={SchedulerWeekViewScreen} />
         </Drawer.Navigator>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { EmptyDateData } from '../components/EmptyDateData';
 import { DateDataItem } from '../components/DateDataItem';
@@ -8,11 +8,12 @@ import { FloatButton } from '../components/FloatButton';
 
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
-import { startLoadEvents } from '../store/calendar/thunks';
+import { startDeleteEvent, startLoadEvents } from '../store/calendar/thunks';
 
 import { Agenda } from 'react-native-calendars';
 import { convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
+import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 
 interface Props extends DrawerScreenProps<any, any>{}
 export const SchedulerScreen = ({navigation}: Props) => {
@@ -27,7 +28,18 @@ export const SchedulerScreen = ({navigation}: Props) => {
     };
 
     const deleteEvent = () => {
-
+        Alert.alert('Eliminar evento', '¿Está seguro de eliminar este evento?', [
+            {
+                text: 'Cancel',
+                onPress: () => dispatch(onDeleteActiveEvent()),
+                style: 'cancel',
+            },
+            {
+                text: 'OK',
+                onPress: () => dispatch(startDeleteEvent(activeEvent!)),
+                style: 'default',
+            },
+        ]);
     };
 
     useEffect(() => {
