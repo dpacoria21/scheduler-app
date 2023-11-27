@@ -9,35 +9,48 @@ import { ButtonSubmit } from '../components/ButtonSubmit';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '../store/store';
-import { startCreateEvent } from '../store/calendar/thunks';
+import { startCreateEvent, startUpdateEvent } from '../store/calendar/thunks';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { RootStackParams } from '../navigators/ScheduleNavigator';
 
 const {width: windowWidth} = Dimensions.get('window');
 
-export const CreateEventScreen = () => {
+interface Props extends DrawerScreenProps<RootStackParams, 'CreateEventScreen'>{}
+export const CreateEventScreen = ({route}: Props) => {
 
-    const {navigate} = useNavigation();
+    let {event} = route.params ?? {};
+
+    const {goBack} = useNavigation();
     const {top} = useSafeAreaInsets();
 
     const dispatch = useAppDispatch();
 
     const { control, handleSubmit, reset, formState:{errors}, watch} = useForm<SubmitEvent>({defaultValues: {
-        title: '',
-        description: '',
-        start: new Date().toISOString(),
-        end: addHours(new Date(), 2).toISOString(),
+        title: event?.title || '',
+        description: event?.description || '',
+        start: event?.start || new Date().toISOString(),
+        end:  event?.end || addHours(new Date(), 2).toISOString(),
     }});
 
     const onSubmit = (data: SubmitEvent) => {
 
-        dispatch(startCreateEvent(data));
+        if (event) {
+            event = {
+                ...event,
+                ...data,
+            };
+            dispatch(startUpdateEvent(event));
+        } else {
+            dispatch(startCreateEvent(data));
+        }
+
         reset({
             title: '',
             description: '',
             start: new Date().toISOString(),
             end: addHours(new Date(), 2).toISOString(),
         });
-        navigate('SchedulerScreen' as never);
-
+        goBack();
     };
 
     return (
@@ -50,7 +63,9 @@ export const CreateEventScreen = () => {
                 <ScrollView style={styles.container}>
                     <View style={{alignItems: 'center', gap: 25}}>
 
-                        <Text style={{...styles.title, marginTop: top + 20}}>Crea tu evento</Text>
+                        <Text style={{...styles.title, marginTop: top + 20}}>{
+                            (event) ? 'Editando evento' : 'Creando evento'
+                        }</Text>
 
                         <View>
                             {/* Espacio para crear el debouncer con los participantes */}
@@ -106,7 +121,7 @@ export const CreateEventScreen = () => {
                                     name="end"
                                 />
                                 <View style={{marginTop: 12}}>
-                                    <ButtonSubmit title="Crear evento" handleSubmit={handleSubmit} onSubmit={onSubmit}/>
+                                    <ButtonSubmit title={(event) ? 'Editar evento' : 'Crear evento'} handleSubmit={handleSubmit} onSubmit={onSubmit}/>
                                 </View>
 
                                 {/* Espacio para poder hacer scroll */}

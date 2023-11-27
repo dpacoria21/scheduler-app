@@ -1,5 +1,5 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AboutScreen } from '../screens/AboutScreen';
 import { SchedulerScreen } from '../screens/SchedulerScreen';
 import { Image, StyleSheet, Text, View } from 'react-native';
@@ -7,12 +7,14 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MenuItem } from '../components/MenuItem';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState, useAppDispatch } from '../store/store';
 import { CreateEventScreen } from '../screens/CreateEventScreen';
 import { TodosScreen } from '../screens/TodosScreen';
 import { DateData } from 'react-native-calendars';
 import { SchedulerDayViewScreen } from '../screens/SchedulerDayViewScreen';
 import { SchedulerWeekViewScreen } from '../screens/SchedulerWeekViewScreen';
+import { Event } from '../interfaces/storeInterfaces';
+import { startLoadEvents } from '../store/calendar/thunks';
 
 interface ItemScreen {
     title: string,
@@ -52,7 +54,7 @@ export type RootStackParams = {
     SchedulerScreen: undefined,
     AboutScreen: undefined,
     TodosScreen: undefined,
-    CreateEventScreen: undefined,
+    CreateEventScreen: {event?: Event},
     SchedulerDayViewScreen: {date: DateData}
     SchedulerWeekViewScreen: undefined,
 }
@@ -61,6 +63,14 @@ export type RootStackParams = {
 const Drawer = createDrawerNavigator<RootStackParams>();
 
 export const SchedulerNavigator = () => {
+
+
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(startLoadEvents());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <Drawer.Navigator
             initialRouteName="SchedulerScreen"
@@ -69,10 +79,10 @@ export const SchedulerNavigator = () => {
             }}
             drawerContent={(props) => <MenuInterno {...props}/>}
         >
-            <Drawer.Screen name="SchedulerScreen" component={SchedulerScreen} />
+            <Drawer.Screen name="SchedulerScreen" options={{unmountOnBlur: true}} component={SchedulerScreen} />
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
             <Drawer.Screen name="TodosScreen"  component={TodosScreen} />
-            <Drawer.Screen name="CreateEventScreen"  component={CreateEventScreen} />
+            <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true}} component={CreateEventScreen} />
             <Drawer.Screen name="SchedulerDayViewScreen" options={{unmountOnBlur: true}} component={SchedulerDayViewScreen} />
             <Drawer.Screen name="SchedulerWeekViewScreen" component={SchedulerWeekViewScreen} />
         </Drawer.Navigator>

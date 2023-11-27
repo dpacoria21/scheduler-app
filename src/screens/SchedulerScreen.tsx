@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { Alert, View } from 'react-native';
 
@@ -8,7 +8,7 @@ import { FloatButton } from '../components/FloatButton';
 
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
-import { startDeleteEvent, startLoadEvents } from '../store/calendar/thunks';
+import { startDeleteEvent } from '../store/calendar/thunks';
 
 import { Agenda } from 'react-native-calendars';
 import { convertDates } from '../helpers/convertDates';
@@ -42,11 +42,6 @@ export const SchedulerScreen = ({navigation}: Props) => {
         ]);
     };
 
-    useEffect(() => {
-        dispatch(startLoadEvents());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <View style={{
             flex:1,
@@ -63,8 +58,12 @@ export const SchedulerScreen = ({navigation}: Props) => {
                             items={convertDates(events)}
                             renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
                             renderEmptyData={EmptyDateData}
+                            loadItemsForMonth={(data) => console.log(data)}
                             // scrollEnabled
+                            keyExtractor={(item) => item}
                             selected={new Date().toDateString()}
+                            pastScrollRange={3}
+                            futureScrollRange={3}
                             minDate="2018-01-01"
                             onDayPress={() => {}}
                             onDayLongPress={(date) => navigation.navigate('SchedulerDayViewScreen', {date})}

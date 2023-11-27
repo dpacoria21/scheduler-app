@@ -38,8 +38,10 @@ export const calendarSlice = createSlice({
         },
 
         onUpdateEvent: (state, {payload}: PayloadAction<Event>) => {
+            state.isLoading = false;
             state.events = state.events.map(event => {
                 if (event.id === payload.id) {
+                    console.log({'eventFrom': event, 'eventTo': payload});
                     return payload;
                 }
                 return event;
@@ -61,6 +63,10 @@ export const calendarSlice = createSlice({
             state.activeEvent = null;
         },
 
+        onCheckingEvents: (state) => {
+            state.isLoading = true;
+        },
+
     },
 });
 
@@ -72,4 +78,5 @@ export const {
     onDeleteEvent,
     onLogoutCalendar,
     onDeleteActiveEvent,
+    onCheckingEvents,
 } = calendarSlice.actions;

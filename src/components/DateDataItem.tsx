@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAppDispatch } from '../store/store';
 import { startSetActiveEvent } from '../store/calendar/thunks';
 import { Event } from '../interfaces/storeInterfaces';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
     event: Event
@@ -12,6 +13,8 @@ interface Props {
 export const DateDataItem = ({event}: Props) => {
 
     const dispatch = useAppDispatch();
+    const {navigate}  = useNavigation();
+
 
     const getFormatHourTime = (timeUTC: string): string => {
         const hour = new Date(timeUTC).toLocaleTimeString('pe');
@@ -23,7 +26,7 @@ export const DateDataItem = ({event}: Props) => {
     };
 
     return (
-        <TouchableOpacity activeOpacity={0.8} style={styles.container} onPress={setActiveEvent}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.container} onPress={setActiveEvent} onLongPress={() => navigate('CreateEventScreen', {event})}>
             <View style={{gap: 3}}>
                 <Text style={styles.hour} numberOfLines={1}>
                     {`${getFormatHourTime(event.start)} - ${getFormatHourTime(event.end)}`}
