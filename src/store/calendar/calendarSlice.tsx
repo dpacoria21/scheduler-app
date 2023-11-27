@@ -41,7 +41,6 @@ export const calendarSlice = createSlice({
             state.isLoading = false;
             state.events = state.events.map(event => {
                 if (event.id === payload.id) {
-                    console.log({'eventFrom': event, 'eventTo': payload});
                     return payload;
                 }
                 return event;

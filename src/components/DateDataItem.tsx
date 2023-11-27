@@ -31,7 +31,7 @@ export const DateDataItem = ({event}: Props) => {
                 <Text style={styles.hour} numberOfLines={1}>
                     {`${getFormatHourTime(event.start)} - ${getFormatHourTime(event.end)}`}
                 </Text>
-                <Text style={styles.title} numberOfLines={1}>
+                <Text style={{...styles.title, width: 185}} numberOfLines={1}>
                     {event.title}
                 </Text>
                 <Text numberOfLines={2} style={{...styles.description, width: 130}}>

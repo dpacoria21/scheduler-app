@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { Alert, View } from 'react-native';
 
@@ -16,12 +16,13 @@ import { LoadingScreen } from './LoadingScreen';
 import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 
 interface Props extends DrawerScreenProps<any, any>{}
-export const SchedulerScreen = ({navigation}: Props) => {
+export const SchedulerScreen = React.memo(({navigation}: Props) => {
 
     const {events, isLoading, activeEvent} = useSelector((state: RootState) => state.calendar);
 
-    // const [currentEvents, setCurrentEvents] = useState<Dates>();
     const dispatch = useAppDispatch();
+
+    const [futureMonths, setFutureMonths] = useState(3);
 
     const navigateToAddEvent = () => {
         navigation.navigate('CreateEventScreen');
@@ -58,15 +59,16 @@ export const SchedulerScreen = ({navigation}: Props) => {
                             items={convertDates(events)}
                             renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
                             renderEmptyData={EmptyDateData}
-                            loadItemsForMonth={(data) => console.log(data)}
-                            // scrollEnabled
                             keyExtractor={(item) => item}
                             selected={new Date().toDateString()}
-                            pastScrollRange={3}
-                            futureScrollRange={3}
-                            minDate="2018-01-01"
+                            futureScrollRange={futureMonths}
                             onDayPress={() => {}}
+                            renderToHardwareTextureAndroid
                             onDayLongPress={(date) => navigation.navigate('SchedulerDayViewScreen', {date})}
+                            onEndReached={() => {
+                                setFutureMonths(c => c + 1);
+                            }}
+                            onEndReachedThreshold={0.5}
                         />
                     )
             }
@@ -79,4 +81,4 @@ export const SchedulerScreen = ({navigation}: Props) => {
 
         </View>
     );
-};
+});
