@@ -8,6 +8,7 @@ import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 import { startDeleteEvent, startSetActiveEvent } from '../store/calendar/thunks';
 import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
+import { generateRandomColor } from '../helpers/generateRandomColor';
 
 interface Props {
     mode: CalendarViewMode
@@ -47,7 +48,7 @@ export const SchedulerViewModeScreen = ({mode, currentDate}: Props) => {
     return (
         <SafeAreaView style={styles.container}>
             <TimelineCalendar
-                events={events.map((event) => ({...event, color: '#a5a3f8'}))}
+                events={events.map((event) => ({...event, color: generateRandomColor()}))}
                 viewMode={mode}
                 locale="es"
                 initialDate={currentDate}
