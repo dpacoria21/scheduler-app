@@ -59,11 +59,9 @@ export type RootStackParams = {
     SchedulerWeekViewScreen: undefined,
 }
 
-
 const Drawer = createDrawerNavigator<RootStackParams>();
 
 export const SchedulerNavigator = () => {
-
 
     const dispatch = useAppDispatch();
     useEffect(() => {
@@ -73,15 +71,16 @@ export const SchedulerNavigator = () => {
 
     return (
         <Drawer.Navigator
-            initialRouteName="SchedulerScreen"
+            backBehavior="history"
+            // initialRouteName="SchedulerScreen"
             screenOptions={{
                 drawerStatusBarAnimation: 'fade',
             }}
             drawerContent={(props) => <MenuInterno {...props}/>}
         >
-            <Drawer.Screen name="SchedulerScreen" options={{unmountOnBlur: true}} component={SchedulerScreen} />
+            <Drawer.Screen name="SchedulerScreen" component={SchedulerScreen} />
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
-            <Drawer.Screen name="TodosScreen"  component={TodosScreen} />
+            <Drawer.Screen name="TodosScreen" component={TodosScreen} />
             <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true}} component={CreateEventScreen} />
             <Drawer.Screen name="SchedulerDayViewScreen" options={{unmountOnBlur: true}} component={SchedulerDayViewScreen} />
             <Drawer.Screen name="SchedulerWeekViewScreen" component={SchedulerWeekViewScreen} />

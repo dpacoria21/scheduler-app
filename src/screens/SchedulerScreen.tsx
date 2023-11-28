@@ -65,10 +65,12 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
                             onDayPress={() => {}}
                             renderToHardwareTextureAndroid
                             onDayLongPress={(date) => navigation.navigate('SchedulerDayViewScreen', {date})}
+
                             onEndReached={() => {
-                                setFutureMonths(c => c + 1);
+                                setFutureMonths(c => c + 3);
                             }}
                             onEndReachedThreshold={0.5}
+
                         />
                     )
             }

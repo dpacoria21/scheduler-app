@@ -1,25 +1,12 @@
-import { TimelineCalendar } from '@howljs/calendar-kit';
 import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { SchedulerViewModeScreen } from './SchedulerViewModeScreen';
 
-
-export const SchedulerWeekViewScreen = () => {
-
-    const {events} = useSelector((state: RootState) => state.calendar);
+interface Props extends DrawerScreenProps<any, any>{}
+export const SchedulerWeekViewScreen = ({}: Props) => {
 
     return (
-        <SafeAreaView style={styles.container}>
-            <TimelineCalendar
-                events={events.map((event) => ({...event, color: '#a5a3f8'}))}
-                viewMode="week"
-                locale="es"
-            />
-        </SafeAreaView>
+        <SchedulerViewModeScreen mode="week" currentDate={undefined}/>
     );
 };
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#FFF' },
-});
