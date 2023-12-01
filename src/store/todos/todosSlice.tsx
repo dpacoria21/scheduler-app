@@ -1,0 +1,55 @@
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Todo } from '../../interfaces/storeInterfaces';
+
+interface TodosState {
+    isLoading: boolean,
+    todos: Todo[],
+    activeTodo?: Todo,
+}
+
+const initialState: TodosState = {
+    isLoading: true,
+    todos: [],
+    activeTodo: undefined,
+};
+
+export const todosSlice = createSlice({
+    name: 'todos',
+    initialState,
+    reducers: {
+        onLoadTodos: (state, {payload}: PayloadAction<Todo[]>) => {
+            state.isLoading = false;
+            state.todos = payload;
+        },
+        onAddTodo: (state, {payload}: PayloadAction<Todo>) => {
+            state.todos.push(payload);
+        },
+        onUpdateTodo: (state, {payload}: PayloadAction<Todo>) => {
+            state.todos = state.todos.map((todo) => {
+                if (todo.id === payload.id) {
+                    return payload;
+                }
+                return todo;
+            });
+        },
+        onDeleteTodo: (state, {payload}: PayloadAction<Todo>) => {
+            state.todos = state.todos.filter(todo => todo.id !== payload.id);
+        },
+        onSetActiveTodo: (state, {payload}: PayloadAction<Todo>) => {
+            state.activeTodo = payload;
+        },
+        onCheckingEvents: (state) => {
+            state.isLoading = true;
+        },
+    },
+});
+
+
+export const {
+    onLoadTodos,
+    onAddTodo,
+    onUpdateTodo,
+    onDeleteTodo,
+    onSetActiveTodo,
+    onCheckingEvents,
+} = todosSlice.actions;

@@ -1,6 +1,6 @@
 import { CalendarViewMode, PackedEvent, TimelineCalendar } from '@howljs/calendar-kit';
 import React from 'react';
-import { Alert, SafeAreaView, StyleSheet } from 'react-native';
+import { Alert, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { FloatButton } from '../components/FloatButton';
@@ -9,6 +9,8 @@ import { startDeleteEvent, startSetActiveEvent } from '../store/calendar/thunks'
 import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
 import { generateRandomColor } from '../helpers/generateRandomColor';
+
+const windowWidth = Dimensions.get('window').width;
 
 interface Props {
     mode: CalendarViewMode
@@ -24,6 +26,10 @@ export const SchedulerViewModeScreen = ({mode, currentDate}: Props) => {
 
     const navigateToAddEvent = () => {
         navigate('CreateEventScreen' as never);
+    };
+
+    const navigateToTodoScreen = () => {
+        navigate('TodosScreen' as never);
     };
 
     const deleteEvent = () => {
@@ -52,28 +58,30 @@ export const SchedulerViewModeScreen = ({mode, currentDate}: Props) => {
                 viewMode={mode}
                 locale="es"
                 initialDate={currentDate}
+                allowPinchToZoom
+                initialTimeIntervalHeight={60}
+                minTimeIntervalHeight={29}
+                maxTimeIntervalHeight={110}
                 onPressEvent={(eventItem) => {
-                    const {description, end, start, todos, id, activeTodo, title} = eventItem;
+                    const {description, end, start, todos, id, title} = eventItem;
                     const newEvent: Event = {
                         id,
                         description,
                         end,
                         start,
                         todos,
-                        activeTodo,
                         title: title!,
                     };
                     setActiveEvent(newEvent);
                 }}
                 onLongPressEvent={(eventItem: PackedEvent) => {
-                    const {id, start, end, description, title, todos, activeTodo} = eventItem;
+                    const {id, start, end, description, title, todos} = eventItem;
                     const event: Event = {
                         id,
                         description,
                         end,
                         start,
                         todos,
-                        activeTodo,
                         title: title!,
                     };
                     navigate('CreateEventScreen', {event});
@@ -82,7 +90,12 @@ export const SchedulerViewModeScreen = ({mode, currentDate}: Props) => {
             <FloatButton style={{position: 'absolute', bottom: 35, right: 35}} icon="add-outline" color="#202020" fn={navigateToAddEvent}/>
 
             {
-                activeEvent && (<FloatButton style={{position: 'absolute', bottom: 35, left: 35}} icon="trash-outline" color="#ff2929" fn={deleteEvent}/>)
+                activeEvent && (
+                    <>
+                        <FloatButton style={{position: 'absolute', bottom: 35, left: 35}} icon="trash-outline" color="#ff2929" fn={deleteEvent}/>
+                        <FloatButton style={{position: 'absolute', bottom: 35, left: (windowWidth / 2) - 22.5}} icon="checkmark-done-outline" color="#228bec" fn={navigateToTodoScreen}/>
+                    </>
+                )
             }
         </SafeAreaView>
     );

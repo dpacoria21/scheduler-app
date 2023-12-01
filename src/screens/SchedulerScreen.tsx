@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { Alert, View } from 'react-native';
+import { Alert, Dimensions, View } from 'react-native';
 
 import { EmptyDateData } from '../components/EmptyDateData';
 import { DateDataItem } from '../components/DateDataItem';
@@ -15,6 +15,8 @@ import { convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
 import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 
+const windowWidth = Dimensions.get('window').width;
+
 interface Props extends DrawerScreenProps<any, any>{}
 export const SchedulerScreen = React.memo(({navigation}: Props) => {
 
@@ -26,6 +28,9 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
 
     const navigateToAddEvent = () => {
         navigation.navigate('CreateEventScreen');
+    };
+    const navigateToTodoScreen = () => {
+        navigation.navigate('TodosScreen');
     };
 
     const deleteEvent = () => {
@@ -78,7 +83,12 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
             <FloatButton style={{position: 'absolute', bottom: 35, right: 35}} icon="add-outline" color="#202020" fn={navigateToAddEvent}/>
 
             {
-                activeEvent && (<FloatButton style={{position: 'absolute', bottom: 35, left: 35}} icon="trash-outline" color="#ff2929" fn={deleteEvent}/>)
+                activeEvent && (
+                    <>
+                        <FloatButton style={{position: 'absolute', bottom: 35, left: 35}} icon="trash-outline" color="#ff2929" fn={deleteEvent}/>
+                        <FloatButton style={{position: 'absolute', bottom: 35, left: (windowWidth / 2) - 22.5}} icon="checkmark-done-outline" color="#228bec" fn={navigateToTodoScreen}/>
+                    </>
+                )
             }
 
         </View>

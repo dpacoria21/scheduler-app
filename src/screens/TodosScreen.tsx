@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Keyboard, ScrollView } from 'react-native';
 
 import { Todo } from '../interfaces/storeInterfaces';
 
-import { FlatList, Swipeable } from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -17,8 +17,6 @@ const rightSwipeActions = () => {
     return (
         <View
             style={{
-                // backgroundColor: 'red',
-                // marginRight: 15,
                 justifyContent: 'center',
                 alignItems: 'flex-end',
             }}
@@ -59,9 +57,10 @@ const ListItem = ({todo, deleteFn, todos}: Props) => {
                 shadowRadius: 2.22,
 
                 elevation: 3,
+                marginBottom: 20,
             }}
         >
-            <View style={styles.todoContainer}>
+            <View style={{...styles.todoContainer, pointerEvents: 'none'}}>
                 <CheckBox
                     disabled={false}
                     value={checkValue}
@@ -135,7 +134,7 @@ export const TodosScreen = () => {
     ]);
 
     return (
-        <View style={{
+        <ScrollView style={{
             flex:1,
             backgroundColor: '#edf7ff',
         }}>
@@ -143,14 +142,20 @@ export const TodosScreen = () => {
                 Mis tareas
             </Text>
 
-            <FlatList
+            {
+                todos.map((todo) => (
+                    <ListItem key={todo.id} deleteFn={setTodos} todos={todos} todo={todo}/>
+                ))
+            }
+
+            {/* <FlatList
                 style={{flex:1}}
                 data={todos}
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => <ListItem deleteFn={setTodos} todos={todos}  todo={item}/>}
                 ItemSeparatorComponent={() => <View style={{height: 25}}/>}
-            />
-        </View>
+            /> */}
+        </ScrollView>
     );
 };
 

@@ -13,7 +13,6 @@ export interface Event {
     start:       string;
     end:         string;
     todos:       Todo[];
-    activeTodo: Todo | null;
 }
 
 

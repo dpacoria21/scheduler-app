@@ -9,4 +9,3 @@ export const SchedulerWeekViewScreen = ({}: Props) => {
         <SchedulerViewModeScreen mode="week" currentDate={undefined}/>
     );
 };
-

@@ -22,6 +22,5 @@ export interface EventResponse {
     end:         string;
     user?: UserStore;
     todos:       Todo[];
-    activeTodo: Todo | null;
 }
 
