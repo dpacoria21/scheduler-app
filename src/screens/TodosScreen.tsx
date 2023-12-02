@@ -1,176 +1,71 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Keyboard, ScrollView } from 'react-native';
-
-import { Todo } from '../interfaces/storeInterfaces';
-
-import { Swipeable } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Ionicons';
-import CheckBox from '@react-native-community/checkbox';
-
-interface Props {
-    todo: Todo,
-    todos: Todo[],
-    deleteFn: Dispatch<SetStateAction<{ id: string; description: string; done: boolean; }[]>>
-}
-
-const rightSwipeActions = () => {
-    return (
-        <View
-            style={{
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-            }}
-        >
-            <Icon
-                name="trash-outline"
-                size={30}
-                color={'red'}
-                style={{
-                    paddingHorizontal: 40,
-                }}
-            />
-        </View>
-    );
-};
-
-const ListItem = ({todo, deleteFn, todos}: Props) => {
-
-    const [value, setValue] = useState(todo.description);
-    const [checkValue, setCheckValue] = useState(true);
-
-    return (
-        <Swipeable
-            onSwipeableOpen={() => {
-                deleteFn(todos.filter((todoMock) => todoMock.id !== todo.id));
-            }}
-            renderRightActions={rightSwipeActions}
-            containerStyle={{
-                backgroundColor: '#fda4a4',
-                marginHorizontal: 15,
-                borderRadius: 5,
-                shadowColor: '#000',
-                shadowOffset: {
-                    width: 0,
-                    height: 1,
-                },
-                shadowOpacity: 0.22,
-                shadowRadius: 2.22,
-
-                elevation: 3,
-                marginBottom: 20,
-            }}
-        >
-            <View style={{...styles.todoContainer, pointerEvents: 'none'}}>
-                <CheckBox
-                    disabled={false}
-                    value={checkValue}
-                    onValueChange={setCheckValue}
-                    boxType="circle"
-                />
-                <TextInput
-                    style={{
-                        color: `${checkValue ? '#fff' : '#ddd'}`,
-                        paddingLeft: 0,
-                        paddingVertical: 16,
-                        width: '60%',
-                        fontSize: 16,
-                        textDecorationLine: `${checkValue ? 'none' : 'line-through'}`,
-                    }}
-                    autoCorrect={false}
-                    multiline
-                    onChangeText={(text) => setValue(text)}
-                    editable={true}
-                    value={value}
-                    onBlur={() => Keyboard.dismiss()}
-                />
-            </View>
-        </Swipeable>
-    );
-};
+import React, { useEffect } from 'react';
+import { Text, ScrollView, View, StyleSheet } from 'react-native';
+import { ListItem } from '../components/ListItem';
+import { useAppDispatch, RootState } from '../store/store';
+import { startLoadTodos } from '../store/todos/thunks';
+import { useSelector } from 'react-redux';
+import { LoadingScreen } from './LoadingScreen';
+import { CreateTodoModal } from '../components/CreateTodoModal';
 
 export const TodosScreen = () => {
 
-    const [todos, setTodos] = useState([
-        {
-            id: '1',
-            description: 'Hacer tarea de Matematica',
-            done: false,
-        },
-        {
-            id: '2',
-            description: 'Hacer tarea de Comunicacion',
-            done: false,
-        },
-        {
-            id: '3',
-            description: 'Hacer tarea de Ciencias',
-            done: false,
-        },
-        {
-            id: '4',
-            description: 'Hacer tarea de Fisica',
-            done: false,
-        },
-        {
-            id: '5',
-            description: 'Hacer tarea de Calculo',
-            done: false,
-        },
-        {
-            id: '6',
-            description: 'Hacer tarea de Calculo',
-            done: false,
-        },
-        {
-            id: '7',
-            description: 'Hacer tarea de Calculo',
-            done: false,
-        },
-        {
-            id: '8',
-            description: 'Hacer tarea de Calculo',
-            done: false,
-        },
-    ]);
+    const dispatch = useAppDispatch();
+    const {activeEvent} = useSelector((state: RootState) => state.calendar);
+    const {todos, isLoading} = useSelector((state: RootState) => state.todos);
+
+    useEffect(() => {
+        dispatch(startLoadTodos((activeEvent?.id + '')));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
-        <ScrollView style={{
-            flex:1,
-            backgroundColor: '#edf7ff',
-        }}>
-            <Text style={{textAlign: 'center', marginVertical: 15}}>
-                Mis tareas
-            </Text>
-
+        <>
             {
-                todos.map((todo) => (
-                    <ListItem key={todo.id} deleteFn={setTodos} todos={todos} todo={todo}/>
-                ))
+                isLoading
+                    ?
+                    <LoadingScreen/>
+                    :
+                    <ScrollView style={{flex: 1, backgroundColor: '#3665f2'}}>
+                        <Text style={{...styles.title, textAlign: 'center', marginVertical: 35, color: '#fff'}}>
+                            Mis tareas
+                        </Text>
+                        <View style={{
+                            backgroundColor: '#dce6fd',
+                            flexGrow: 1,
+                            gap: 10,
+                            borderTopLeftRadius: 35,
+                            borderTopRightRadius: 35,
+                            paddingTop: 60,
+                            // paddingHorizontal: 10,
+                        }}>
+                            {
+                                todos.map((todo) => (
+                                    <ListItem key={todo.id} todo={todo} todos={todos} deleteFn={() => {}}/>
+                                ))
+                            }
+                        </View>
+                    </ScrollView>
             }
-
-            {/* <FlatList
-                style={{flex:1}}
-                data={todos}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => <ListItem deleteFn={setTodos} todos={todos}  todo={item}/>}
-                ItemSeparatorComponent={() => <View style={{height: 25}}/>}
-            /> */}
-        </ScrollView>
+            <CreateTodoModal />
+        </>
     );
 };
 
 const styles = StyleSheet.create({
-    todoContainer: {
-        backgroundColor: '#3e44ff',
-        // marginHorizontal: 15,
-        borderRadius: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 25,
-        // justifyContent: 'center',
-        gap: 10,
-        // flex: 1,
-        // paddingHorizontal: 10,
-        // paddingVertical: 8,
+    title: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#202020',
+    },
+    todosContainer: {
+        width: '100%',
+        backgroundColor: '#3985f8',
+        borderTopLeftRadius: 45,
+        borderTopRightRadius: 45,
+        // paddingTop: 100,
+        // paddingBottom: 200,
+        // paddingVertical: 50,
+        // paddingTop: 50,
+        // paddingLeft: 30,
     },
 });

@@ -5,6 +5,7 @@ import { useAppDispatch } from '../store/store';
 import { startSetActiveEvent } from '../store/calendar/thunks';
 import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
+import { getFormatHourTime } from '../helpers/getFormatHourTime';
 
 interface Props {
     event: Event
@@ -14,12 +15,6 @@ export const DateDataItem = ({event}: Props) => {
 
     const dispatch = useAppDispatch();
     const {navigate}  = useNavigation();
-
-
-    const getFormatHourTime = (timeUTC: string): string => {
-        const hour = new Date(timeUTC).toLocaleTimeString('pe');
-        return `${hour.slice(0, -5)}${hour.slice(-3)}`;
-    };
 
     const setActiveEvent = () => {
         dispatch(startSetActiveEvent(event));

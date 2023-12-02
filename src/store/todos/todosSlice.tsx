@@ -32,13 +32,13 @@ export const todosSlice = createSlice({
                 return todo;
             });
         },
-        onDeleteTodo: (state, {payload}: PayloadAction<Todo>) => {
-            state.todos = state.todos.filter(todo => todo.id !== payload.id);
+        onDeleteTodo: (state, {payload}: PayloadAction<string>) => {
+            state.todos = state.todos.filter(todo => todo.id !== payload);
         },
         onSetActiveTodo: (state, {payload}: PayloadAction<Todo>) => {
             state.activeTodo = payload;
         },
-        onCheckingEvents: (state) => {
+        onCheckingTodos: (state) => {
             state.isLoading = true;
         },
     },
@@ -51,5 +51,5 @@ export const {
     onUpdateTodo,
     onDeleteTodo,
     onSetActiveTodo,
-    onCheckingEvents,
+    onCheckingTodos,
 } = todosSlice.actions;
