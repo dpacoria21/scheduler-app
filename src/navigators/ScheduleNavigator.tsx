@@ -80,7 +80,7 @@ export const SchedulerNavigator = () => {
         >
             <Drawer.Screen name="SchedulerScreen" component={SchedulerScreen} />
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
-            <Drawer.Screen name="TodosScreen" options={{headerShown: false}} component={TodosScreen} />
+            <Drawer.Screen name="TodosScreen" options={{headerShown: false, unmountOnBlur: true}} component={TodosScreen} />
             <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true}} component={CreateEventScreen} />
             <Drawer.Screen name="SchedulerDayViewScreen" options={{unmountOnBlur: true}} component={SchedulerDayViewScreen} />
             <Drawer.Screen name="SchedulerWeekViewScreen" component={SchedulerWeekViewScreen} />

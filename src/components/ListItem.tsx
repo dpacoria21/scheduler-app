@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Todo } from '../interfaces/storeInterfaces';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { RootState, useAppDispatch } from '../store/store';
 import { useSelector } from 'react-redux';
-import { startDeleteTodo } from '../store/todos/thunks';
+import { startDeleteTodo, startUpdateTodo } from '../store/todos/thunks';
+import { Controller, useForm } from 'react-hook-form';
+import { TodoSubmit } from '../interfaces/formsData';
+import { stylesInput } from './Input';
+import { FloatButton } from './FloatButton';
 
 interface Props {
     todo: Todo,
@@ -34,11 +38,24 @@ const rightSwipeActions = () => {
 };
 
 export const ListItem = ({todo}: Props) => {
-    const [value, setValue] = useState(todo.description);
-    const [checkValue, setCheckValue] = useState(todo.done);
+
+    const { control, handleSubmit, formState:{errors}, watch} = useForm<TodoSubmit>({defaultValues: {
+        description: todo.description,
+        done: todo.done,
+    }});
 
     const dispatch = useAppDispatch();
     const {activeEvent} = useSelector((state: RootState) => state.calendar);
+
+
+    const onSubmit = (data: TodoSubmit) => {
+        const updateTodo = {
+            ...todo,
+            ...data,
+        };
+        dispatch(startUpdateTodo(activeEvent!.id, updateTodo));
+        // dispatch(startAddTodo(data.description, data.done, activeEvent!.id));
+    };
 
     return (
         <Swipeable
@@ -62,35 +79,72 @@ export const ListItem = ({todo}: Props) => {
             }}
         >
             <View style={{...styles.todoContainer}}>
-                <CheckBox
-                    disabled={false}
-                    value={checkValue}
-                    onValueChange={setCheckValue}
-                    boxType="circle"
-                    tintColors={{
-                        true: '#466fff',
-                        false: '#466fff',
-                    }}
+                <Controller
+                    control={control}
+                    render={({field: {onChange, value}}) => (
+                        <CheckBox
+                            value={value}
+                            onValueChange={onChange}
+                            boxType="circle"
+                            tintColors={{
+                                true: '#466fff',
+                                false: '#466fff',
+                            }}
+                        />
+                    )}
+                    name="done"
                 />
-                <TextInput
-                    onPressIn={() => console.log('Hizo presion')}
-                    style={{
-                        color: `${checkValue ? '#858585' : '#000'}`,
-                        paddingLeft: 0,
-                        paddingVertical: 16,
-                        width: '60%',
-                        fontSize: 17,
-                        fontWeight: '500',
-                        textDecorationLine: `${checkValue ? 'line-through' : 'none'}`,
+                <Controller
+                    control={control}
+                    rules={{
+                        required: true,
                     }}
-                    autoCorrect={false}
-                    multiline
-                    onChangeText={(text) => setValue(text)}
-                    editable={true}
-                    value={value}
-                    onBlur={() => Keyboard.dismiss()}
+                    render={({field: {onChange, value, onBlur}}) => (
+                        <TextInput
+                            onPressIn={() => console.log('Hizo presion')}
+                            style={{
+                                color: `${ watch('done') ? '#858585' : '#000'}`,
+                                paddingLeft: 0,
+                                paddingVertical: 16,
+                                width: '60%',
+                                fontSize: 17,
+                                fontWeight: '500',
+                                textDecorationLine: `${ watch('done') ? 'line-through' : 'none'}`,
+                            }}
+                            autoCorrect={false}
+                            multiline
+                            onChangeText={onChange}
+                            editable={true}
+                            value={value}
+                            onBlur={() => {
+                                Keyboard.dismiss();
+                                onBlur();
+                            }}
+                        />
+                    )}
+                    name="description"
+                />
+                <FloatButton
+                    icon="save-outline"
+                    color="#1f3fae"
+                    fn={handleSubmit(onSubmit)}
+                    size={24}
+                    style={{
+                        left: 30,
+                        // justifyContent: 'center',
+                        // padding: 10,
+                    }}
+                    styleButton={{
+                        padding: 6,
+                        backgroundColor: '#eff4ff',
+                        borderTopLeftRadius: 7,
+                        borderTopRightRadius: 7,
+                        borderBottomLeftRadius: 7,
+                        borderBottomRightRadius: 7,
+                    }}
                 />
             </View>
+            {errors.description && <Text style={{...stylesInput.labelError, padding: 5}}>⚠ This is required</Text>}
         </Swipeable>
     );
 };

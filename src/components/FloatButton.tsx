@@ -7,17 +7,18 @@ interface Props {
     styleButton?: StyleProp<ViewStyle>
     color: string,
     icon: string,
+    size?: number,
     fn: () => void,
 }
 
-export const FloatButton = ({style, styleButton, color, icon, fn}: Props) => {
+export const FloatButton = ({style, styleButton, color, icon, fn, size = 35}: Props) => {
 
     return (
         <View style={{...style as any}}>
             <TouchableOpacity activeOpacity={0.7} onPress={fn}>
                 <Icon
                     name={icon}
-                    size={35}
+                    size={size}
                     color={color}
                     style={{
                         padding: 7.5,

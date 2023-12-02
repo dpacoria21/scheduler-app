@@ -11,6 +11,7 @@ import { useAnimations } from '../hooks/useAnimations';
 import { getFormatHourTime } from '../helpers/getFormatHourTime';
 import { FloatButton } from '../components/FloatButton';
 import { useNavigation } from '@react-navigation/native';
+import { onClearTodos } from '../store/todos/todosSlice';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -40,7 +41,10 @@ export const TodosScreen = () => {
                         <FloatButton
                             color="#1f4dd6"
                             icon="arrow-back-outline"
-                            fn={() => goBack()}
+                            fn={() => {
+                                dispatch(onClearTodos());
+                                goBack();
+                            }}
                             style={{
                                 position: 'absolute',
                                 left: 15,
@@ -60,6 +64,7 @@ export const TodosScreen = () => {
                             borderTopRightRadius: 45,
                             paddingHorizontal: 15,
                             paddingTop: 10,
+                            paddingBottom: 75,
                         }}>
                             <View style={{flexDirection: 'column', position: 'relative' , justifyContent: 'center', height: 120}}>
                                 <Animated.Image

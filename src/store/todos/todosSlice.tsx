@@ -41,6 +41,11 @@ export const todosSlice = createSlice({
         onCheckingTodos: (state) => {
             state.isLoading = true;
         },
+        onClearTodos: (state) => {
+            state.isLoading = true;
+            state.todos = [];
+            state.activeTodo = undefined;
+        },
     },
 });
 
@@ -52,4 +57,5 @@ export const {
     onDeleteTodo,
     onSetActiveTodo,
     onCheckingTodos,
+    onClearTodos,
 } = todosSlice.actions;

@@ -13,14 +13,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { FloatButton } from './FloatButton';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { TodoSubmit } from '../interfaces/formsData';
 
 
 const {width: windowWidth} = Dimensions.get('window');
-
-interface TodoSubmit {
-    description: string,
-    done: boolean,
-}
 
 export const CreateTodoModal = () => {
 

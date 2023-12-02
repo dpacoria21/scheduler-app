@@ -8,3 +8,8 @@ export interface RegisterFormData {
     email: string,
     password: string,
 }
+
+export interface TodoSubmit {
+    description: string,
+    done: boolean,
+}
