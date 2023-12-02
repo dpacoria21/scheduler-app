@@ -6,6 +6,7 @@ export const EmptyDateData = () => {
     return (
         <View style={styles.container}>
             <Icon
+                color={'#202020'}
                 name="happy-outline"
                 size={30}
             />
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     emptyText: {
+        color: '#202020',
         fontWeight: '500',
         fontSize: 20,
         marginHorizontal: 20,

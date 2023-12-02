@@ -54,7 +54,7 @@ export const CreateTodoModal = () => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{zIndex: 999}}
         >
-            <FloatButton style={{position: 'absolute', bottom: 25, right: 25, zIndex: 999}} color="#151515" icon="add-outline" fn={() => setIsVisible(true)}/>
+            <FloatButton style={{position: 'absolute', bottom: 25, right: 25, zIndex: 999}} styleButton={{backgroundColor: '#2560e9'}} color="#c0dafd" icon="add-outline" fn={() => setIsVisible(true)}/>
             <Modal
                 animationType="fade"
                 visible={isVisible}

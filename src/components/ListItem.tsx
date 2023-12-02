@@ -35,7 +35,7 @@ const rightSwipeActions = () => {
 
 export const ListItem = ({todo}: Props) => {
     const [value, setValue] = useState(todo.description);
-    const [checkValue, setCheckValue] = useState(true);
+    const [checkValue, setCheckValue] = useState(todo.done);
 
     const dispatch = useAppDispatch();
     const {activeEvent} = useSelector((state: RootState) => state.calendar);
@@ -48,7 +48,6 @@ export const ListItem = ({todo}: Props) => {
             renderRightActions={rightSwipeActions}
             containerStyle={{
                 backgroundColor: '#fda4a4',
-                marginHorizontal: 15,
                 borderRadius: 5,
                 shadowColor: '#000',
                 shadowOffset: {
@@ -74,6 +73,7 @@ export const ListItem = ({todo}: Props) => {
                     }}
                 />
                 <TextInput
+                    onPressIn={() => console.log('Hizo presion')}
                     style={{
                         color: `${checkValue ? '#858585' : '#000'}`,
                         paddingLeft: 0,

@@ -4,12 +4,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
     style?: StyleProp<ViewStyle>
+    styleButton?: StyleProp<ViewStyle>
     color: string,
     icon: string,
     fn: () => void,
 }
 
-export const FloatButton = ({style, color, icon, fn}: Props) => {
+export const FloatButton = ({style, styleButton, color, icon, fn}: Props) => {
 
     return (
         <View style={{...style as any}}>
@@ -31,6 +32,7 @@ export const FloatButton = ({style, color, icon, fn}: Props) => {
                         shadowRadius: 3.84,
 
                         elevation: 5,
+                        ...styleButton as any,
                     }}
                 />
             </TouchableOpacity>
