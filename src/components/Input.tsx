@@ -11,9 +11,10 @@ interface Props {
     value: string,
     errors?: object,
     style?: StyleProp<ViewStyle>
+    autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined
 }
 
-export const Input = ({style, errors, label, placeholder, keyboardType = 'default', secureText = false, onChange, onBlur, value}: Props) => {
+export const Input = ({autoCapitalize, style, errors, label, placeholder, keyboardType = 'default', secureText = false, onChange, onBlur, value}: Props) => {
 
     return (
         <View style={stylesInput.inputContainer}>
@@ -37,7 +38,7 @@ export const Input = ({style, errors, label, placeholder, keyboardType = 'defaul
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                autoCapitalize="none"
+                autoCapitalize={autoCapitalize}
             />
             {errors && <Text style={stylesInput.labelError}>⚠ This is required</Text>}
         </View>

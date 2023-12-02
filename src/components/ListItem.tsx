@@ -1,15 +1,16 @@
+import React, { useState } from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Todo } from '../interfaces/storeInterfaces';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { RootState, useAppDispatch } from '../store/store';
+import { useSelector } from 'react-redux';
+import { startDeleteTodo } from '../store/todos/thunks';
 
 interface Props {
     todo: Todo,
-    todos: Todo[],
-    deleteFn: Dispatch<SetStateAction<{ id: string; description: string; done: boolean; }[]>>
 }
 
 const rightSwipeActions = () => {
@@ -32,14 +33,17 @@ const rightSwipeActions = () => {
     );
 };
 
-export const ListItem = ({todo, deleteFn, todos}: Props) => {
+export const ListItem = ({todo}: Props) => {
     const [value, setValue] = useState(todo.description);
     const [checkValue, setCheckValue] = useState(true);
+
+    const dispatch = useAppDispatch();
+    const {activeEvent} = useSelector((state: RootState) => state.calendar);
 
     return (
         <Swipeable
             onSwipeableOpen={() => {
-                deleteFn(todos.filter((todoMock) => todoMock.id !== todo.id));
+                dispatch(startDeleteTodo(activeEvent!.id, todo.id));
             }}
             renderRightActions={rightSwipeActions}
             containerStyle={{
@@ -64,18 +68,20 @@ export const ListItem = ({todo, deleteFn, todos}: Props) => {
                     value={checkValue}
                     onValueChange={setCheckValue}
                     boxType="circle"
-                    style={{
+                    tintColors={{
+                        true: '#466fff',
+                        false: '#466fff',
                     }}
                 />
                 <TextInput
                     style={{
-                        color: `${checkValue ? '#000' : '#858585'}`,
+                        color: `${checkValue ? '#858585' : '#000'}`,
                         paddingLeft: 0,
                         paddingVertical: 16,
                         width: '60%',
                         fontSize: 17,
                         fontWeight: '500',
-                        textDecorationLine: `${checkValue ? 'none' : 'line-through'}`,
+                        textDecorationLine: `${checkValue ? 'line-through' : 'none'}`,
                     }}
                     autoCorrect={false}
                     multiline

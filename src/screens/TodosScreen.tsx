@@ -32,15 +32,16 @@ export const TodosScreen = () => {
                         <View style={{
                             backgroundColor: '#dce6fd',
                             flexGrow: 1,
-                            gap: 10,
-                            borderTopLeftRadius: 35,
-                            borderTopRightRadius: 35,
+                            // gap: 5,
+                            // minHeight: '100%',
+                            borderTopLeftRadius: 45,
+                            borderTopRightRadius: 45,
                             paddingTop: 60,
                             // paddingHorizontal: 10,
                         }}>
                             {
                                 todos.map((todo) => (
-                                    <ListItem key={todo.id} todo={todo} todos={todos} deleteFn={() => {}}/>
+                                    <ListItem key={todo.id} todo={todo} />
                                 ))
                             }
                         </View>

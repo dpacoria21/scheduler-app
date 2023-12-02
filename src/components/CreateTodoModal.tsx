@@ -106,7 +106,7 @@ export const CreateTodoModal = () => {
                                 required: true,
                             }}
                             render={({field: {onChange, value, onBlur}}) => (
-                                <Input style={{height: 40}} errors={errors.description} onBlur={onBlur} onChange={onChange} value={value} label="Descripción" placeholder="ej. descripción..." keyboardType="default"/>
+                                <Input style={{height: 40}} autoCapitalize="sentences" errors={errors.description} onBlur={onBlur} onChange={onChange} value={value} label="Descripción" placeholder="ej. descripción..." keyboardType="default"/>
                             )}
                             name="description"
                         />
