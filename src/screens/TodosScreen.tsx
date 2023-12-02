@@ -12,6 +12,7 @@ import { getFormatHourTime } from '../helpers/getFormatHourTime';
 import { FloatButton } from '../components/FloatButton';
 import { useNavigation } from '@react-navigation/native';
 import { onClearTodos } from '../store/todos/todosSlice';
+import { EmptyDateData } from '../components/EmptyDateData';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -98,9 +99,13 @@ export const TodosScreen = () => {
                                 </Text>
                             </View>
                             {
-                                todos.map((todo) => (
-                                    <ListItem key={todo.id} todo={todo} />
-                                ))
+                                todos.length === 0
+                                    ?
+                                    (<EmptyDateData message="No existe ninguna tarea creada"/>)
+                                    :
+                                    (todos.map((todo) => (
+                                        <ListItem key={todo.id} todo={todo} />
+                                    )))
                             }
                         </View>
                     </ScrollView>

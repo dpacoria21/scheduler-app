@@ -63,7 +63,7 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
                             showOnlySelectedDayItems
                             items={convertDates(events)}
                             renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
-                            renderEmptyData={EmptyDateData}
+                            renderEmptyData={() => <EmptyDateData message="No existe ningún evento creado para el día de hoy"/>}
                             keyExtractor={(item) => item}
                             selected={new Date().toDateString()}
                             futureScrollRange={futureMonths}

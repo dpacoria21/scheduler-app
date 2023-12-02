@@ -114,7 +114,7 @@ export const ListItem = ({todo}: Props) => {
                             autoCorrect={false}
                             multiline
                             onChangeText={onChange}
-                            editable={true}
+                            editable={!watch('done')}
                             value={value}
                             onBlur={() => {
                                 Keyboard.dismiss();

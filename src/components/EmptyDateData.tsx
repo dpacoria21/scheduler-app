@@ -2,7 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export const EmptyDateData = () => {
+interface Props {
+    message: string
+}
+
+export const EmptyDateData = ({message}: Props) => {
     return (
         <View style={styles.container}>
             <Icon
@@ -12,7 +16,7 @@ export const EmptyDateData = () => {
             />
 
             <Text style={styles.emptyText}>
-                No existe ningún evento creado para el día de hoy
+                {message}
             </Text>
 
         </View>
