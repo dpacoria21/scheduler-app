@@ -2,7 +2,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavig
 import React, { useEffect } from 'react';
 import { AboutScreen } from '../screens/AboutScreen';
 import { SchedulerScreen } from '../screens/SchedulerScreen';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MenuItem } from '../components/MenuItem';
@@ -15,6 +15,8 @@ import { SchedulerDayViewScreen } from '../screens/SchedulerDayViewScreen';
 import { SchedulerWeekViewScreen } from '../screens/SchedulerWeekViewScreen';
 import { Event } from '../interfaces/storeInterfaces';
 import { startLoadEvents } from '../store/calendar/thunks';
+import { BackgroundGradient } from '../components/BackgroundGradient';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface ItemScreen {
     title: string,
@@ -22,26 +24,23 @@ interface ItemScreen {
     component: string,
 }
 
+const windowWitdh = Dimensions.get('window').width;
+
 const Screens: ItemScreen[] = [
     {
         title: 'Calendario',
-        icon: 'calendar-outline',
+        icon: 'calendar-number-outline',
         component: 'SchedulerScreen',
     },
     {
         title: 'Week',
-        icon: 'calendar-clear-outline',
+        icon: 'calendar-outline',
         component: 'SchedulerWeekViewScreen',
     },
     {
         title: 'Day',
-        icon: 'calendar-number-outline',
+        icon: 'today-outline',
         component: 'SchedulerDayViewScreen',
-    },
-    {
-        title: 'Todos',
-        icon: 'school-outline',
-        component: 'TodosScreen',
     },
     {
         title: 'About',
@@ -75,6 +74,11 @@ export const SchedulerNavigator = () => {
             // initialRouteName="SchedulerScreen"
             screenOptions={{
                 drawerStatusBarAnimation: 'fade',
+                drawerStyle: {
+                    backgroundColor: 'red',
+                    width: windowWitdh * 0.8,
+                },
+                drawerActiveBackgroundColor: '#000',
             }}
             drawerContent={(props) => <MenuInterno {...props}/>}
         >
@@ -94,97 +98,167 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
     const {navigation} = props;
 
     return (
-        <DrawerContentScrollView  style={{backgroundColor: '#e2e2e2'}}>
-            <View
-                style={styles.container}
-            >
+        <BackgroundGradient style={{flex: 1}} colors={['#1074b9', '#1e93d9']}>
+            <DrawerContentScrollView>
+                <View style={styles.container}>
 
-                <View style={styles.closeIconContainer}>
-                    <Icon
-                        onPress={() => navigation.closeDrawer()}
-                        name="chevron-back-outline"
-                        size={45}
-                        color={'#252525'}
-                        style={styles.closeIcon}
-                    />
-                </View>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'flex-end',
+                        marginTop: 15,
+                    }}>
+                        <TouchableOpacity activeOpacity={0.8} style={styles.closeIconContainer}>
+                            <Icon
+                                onPress={() => navigation.closeDrawer()}
+                                name="arrow-back-outline"
+                                size={35}
+                                color={'#e2f0fc'}
+                                style={styles.closeIcon}
+                            />
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={styles.imageContainer}>
-                    <View style={styles.imageBackground}>
+
+                    <View style={styles.userContainer}>
+                        {/* <View style={styles.imageContainer}> */}
                         <Image
-                            source={require('../assets/user.png')}
+                            source={require('../assets/profile.png')}
                             style={styles.image}
                         />
+                        {/* </View> */}
+                        <View style={styles.userInformation}>
+                            <Text style={styles.textInformationName}>
+                                {/* {user.name} */}
+                                Diego Ivan Pacori Anccasi
+                            </Text>
+                            <Text style={styles.textInformationEmail}>
+                                {user.email}
+                            </Text>
+                        </View>
                     </View>
-                </View>
-                <View style={{
-                    alignItems: 'center',
-                }}>
-                    <Text style={styles.panelText}>
-                        {user.name}
-                    </Text>
-                </View>
 
-                <View style={{
-                    gap: 10,
-                }}>
-                    {
-                        Screens.map((screen) => (
-                            <MenuItem
-                                key={screen.title}
-                                title={screen.title}
-                                icon={screen.icon}
-                                component={screen.component}
-                            />
-                        ))
-                    }
-                    <MenuItem
-                        title="Logout"
-                        icon="log-out-outline"
-                    />
+                    <View style={{
+                        gap: 10,
+                    }}>
+                        {
+                            Screens.map((screen) => (
+                                <MenuItem
+                                    key={screen.title}
+                                    title={screen.title}
+                                    icon={screen.icon}
+                                    component={screen.component}
+                                />
+                            ))
+                        }
+                        <MenuItem
+                            title="Logout"
+                            icon="log-out-outline"
+                        />
+                    </View>
+
+                    <View style={styles.notificationContainer}>
+                        <View style={styles.notificationTitleContainer}>
+                            <Text style={styles.notificationText}>
+                                Notificaciones
+                            </Text>
+                            <View style={styles.notificationCountContainer}>
+                                <Text style={styles.notificationNumber}>
+                                    0
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+
                 </View>
-            </View>
-        </DrawerContentScrollView>
+            </DrawerContentScrollView>
+        </BackgroundGradient>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 15,
-        gap: 30,
+        gap: 15,
     },
 
     closeIconContainer: {
-        flex:1,
-        alignItems: 'flex-end',
-        paddingTop: 20,
+        borderRadius: 100,
+        backgroundColor: '#1074b9',
     },
     closeIcon: {
-        width: 50,
-        height: 50,
+        padding: 8,
         borderRadius: 100,
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    },
+    userContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 30,
     },
     imageContainer: {
-        flex:1,
-        alignItems: 'center',
-    },
-    imageBackground: {
-        height: 175,
-        width: 175,
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: 80,
+        height: 80,
         borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'red',
     },
     image: {
-        tintColor: '#252525',
-        width: 90,
-        height: 90,
+        width: 85,
+        height: 85,
+        resizeMode: 'cover',
+    },
+    userInformation: {
+        flex: 1,
+        gap: 2,
+    },
+    textInformationName: {
+        fontSize: 17,
+        fontWeight: '600',
+        color: '#f1f1f1',
+    },
+    textInformationEmail: {
+        fontSize: 15,
+        fontWeight: '500',
+        color: '#ddd',
     },
     panelText: {
         fontSize: 20,
         color: '#151515',
         fontWeight: '600',
+    },
+
+    notificationContainer: {
+        paddingHorizontal: 10,
+    },
+    notificationTitleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: 10,
+        borderBottomColor: '#a5a5a5',
+        borderBottomWidth: 2,
+        marginTop: 20,
+    },
+    notificationText: {
+        color: '#f1f1f1',
+        fontSize: 18,
+    },
+
+    notificationCountContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0f5d95',
+        borderRadius: 15,
+        width: 45,
+        height: 30,
+    },
+    notificationNumber: {
+        color: '#f1f1f1',
+        fontSize: 16,
+        top: -1,
+        fontWeight: 'bold',
     },
 });

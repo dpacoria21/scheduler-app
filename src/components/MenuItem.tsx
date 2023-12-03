@@ -30,29 +30,35 @@ export const MenuItem = ({title, icon, component = ''}: Props) => {
                 }
             }}
             style={{
-                backgroundColor: '#fff',
-                paddingLeft: 20,
+                paddingHorizontal: 10,
                 paddingVertical: 7,
                 borderRadius: 4,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
             }}>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: 10,
+                gap: 23,
             }}>
                 <Icon
                     name={icon}
-                    size={35}
-                    color={'#252525'}
+                    size={40}
+                    color={'#d9d9d9'}
                 />
                 <Text style={{
                     fontSize: 18,
-                    fontWeight: '600',
-                    color: '#252525',
+                    fontWeight: '500',
+                    color: '#d9d9d9',
                 }}>
                     {title}
                 </Text>
             </View>
+            <Icon
+                name="chevron-forward-outline"
+                size={35}
+                color={'#e9e9e9'}
+            />
         </TouchableOpacity>
     );
 };
