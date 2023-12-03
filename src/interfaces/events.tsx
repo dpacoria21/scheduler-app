@@ -3,4 +3,5 @@ export interface SubmitEvent {
     description: string,
     start: string,
     end: string,
+    color: string,
 }

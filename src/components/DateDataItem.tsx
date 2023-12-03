@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useAppDispatch } from '../store/store';
+import { useAppDispatch, RootState } from '../store/store';
 import { startSetActiveEvent } from '../store/calendar/thunks';
 import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
 import { getFormatHourTime } from '../helpers/getFormatHourTime';
+import { useSelector } from 'react-redux';
 
 interface Props {
     event: Event
@@ -15,6 +16,7 @@ export const DateDataItem = ({event}: Props) => {
 
     const dispatch = useAppDispatch();
     const {navigate}  = useNavigation();
+    const {user} = useSelector((state: RootState) => state.auth);
 
     const setActiveEvent = () => {
         dispatch(startSetActiveEvent(event));
@@ -33,9 +35,9 @@ export const DateDataItem = ({event}: Props) => {
                     {event.description}
                 </Text>
             </View>
-            <View style={styles.circle}>
-                <Text>
-                    DP
+            <View style={{...styles.circle, backgroundColor: event.color}}>
+                <Text style={{fontWeight: '600', fontSize: 25}}>
+                    {user.name[0].toUpperCase()}
                 </Text>
             </View>
         </TouchableOpacity>

@@ -15,7 +15,10 @@ export const convertDates = (events: Event[] = []) => {
     if (!events) {return dates;}
 
     events.forEach((event) => {
-        const dateStr = event.start.split('T')[0];
+
+        const newDateStr = new Date(event.start).toLocaleDateString('en-ZA');
+        const dateStr = newDateStr.replaceAll('/', '-');
+
         if (!Object.hasOwn(dates, dateStr)) {
             dates[dateStr] = [];
             dates[dateStr].push({

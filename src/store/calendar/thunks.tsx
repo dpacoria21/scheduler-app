@@ -11,7 +11,7 @@ export const startSetActiveEvent = (event: Event) => {
     };
 };
 
-export const startCreateEvent = ({title, description, start, end}: SubmitEvent) => {
+export const startCreateEvent = ({title, description, start, end, color}: SubmitEvent) => {
     return async(dispatch: Dispatch) => {
         try {
             const {data} = await schedulerApi.post<EventResponse>('/events', {
@@ -19,6 +19,7 @@ export const startCreateEvent = ({title, description, start, end}: SubmitEvent) 
                 description,
                 start,
                 end,
+                color,
             });
 
             delete data.user;
@@ -60,13 +61,14 @@ export const startUpdateEvent = (event: Event) => {
 
             dispatch(onCheckingEvents());
 
-            const {id, title, description, start, end} = event;
+            const {id, title, description, start, end, color} = event;
 
             const {data} = await schedulerApi.patch<Event>(`/events/${id}`, {
                 title,
                 description,
                 start,
                 end,
+                color,
             });
             dispatch(onUpdateEvent(data));
         } catch (error) {

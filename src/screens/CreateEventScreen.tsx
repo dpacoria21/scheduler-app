@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Dimensions, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { SubmitEvent } from '../interfaces/events';
@@ -12,6 +12,8 @@ import { useAppDispatch } from '../store/store';
 import { startCreateEvent, startUpdateEvent } from '../store/calendar/thunks';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { RootStackParams } from '../navigators/ScheduleNavigator';
+import { ColorPicker } from 'react-native-color-picker';
+import { fromHsv } from 'react-native-color-picker';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -22,6 +24,8 @@ export const CreateEventScreen = ({route}: Props) => {
 
     const {goBack} = useNavigation();
     const {top} = useSafeAreaInsets();
+
+    const currentColor = useRef('#c0d3fd');
 
     const dispatch = useAppDispatch();
 
@@ -38,9 +42,11 @@ export const CreateEventScreen = ({route}: Props) => {
             event = {
                 ...event,
                 ...data,
+                color: currentColor.current,
             };
             dispatch(startUpdateEvent(event));
         } else {
+            data.color = currentColor.current;
             dispatch(startCreateEvent(data));
         }
 
@@ -120,10 +126,32 @@ export const CreateEventScreen = ({route}: Props) => {
                                     )}
                                     name="end"
                                 />
-                                <View style={{marginTop: 12}}>
+
+                                <View style={{flex: 1}}>
+                                    <Text style={{
+                                        fontSize: 15,
+                                        color: 'rgba(0, 0, 0, 0.4)',
+                                        fontWeight: '500',
+                                    }}>
+                                        Elige un color
+                                    </Text>
+                                    <View style={{flex:1, alignItems: 'center'}}>
+                                        <ColorPicker
+                                            onColorChange={(selectedColor) =>{
+                                                currentColor.current = fromHsv(selectedColor);
+                                            }}
+                                            hideSliders
+                                            defaultColor={'#c0d3fd'}
+                                            style={{
+                                                width: 200,
+                                                height: 200,
+                                            }}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={{}}>
                                     <ButtonSubmit title={(event) ? 'Editar evento' : 'Crear evento'} handleSubmit={handleSubmit} onSubmit={onSubmit}/>
                                 </View>
-
                                 {/* Espacio para poder hacer scroll */}
                                 <View style={{height: 60}} />
                             </View>

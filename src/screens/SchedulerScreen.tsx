@@ -48,6 +48,8 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
         ]);
     };
 
+    console.log(convertDates(events));
+
     return (
         <View style={{
             flex:1,
