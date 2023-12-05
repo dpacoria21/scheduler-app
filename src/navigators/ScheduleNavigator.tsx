@@ -1,5 +1,5 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AboutScreen } from '../screens/AboutScreen';
 import { SchedulerScreen } from '../screens/SchedulerScreen';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
@@ -17,6 +17,8 @@ import { Event } from '../interfaces/storeInterfaces';
 import { startLoadEvents } from '../store/calendar/thunks';
 import { BackgroundGradient } from '../components/BackgroundGradient';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { schedulerApi } from '../api/schedulerApi';
+import { Notification } from '../interfaces/notification';
 
 interface ItemScreen {
     title: string,
@@ -97,6 +99,17 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
     const {user} = useSelector((state: RootState) => state.auth);
     const {navigation} = props;
 
+    // const [notifications, setNotifications] = useState<Notification[]>([]);
+
+    // const loadNotifications = async() => {
+    //     const {data} = await schedulerApi.get<Notification[]>('/events/participants/invitations/me');
+    //     setNotifications([...data]);
+    // };
+
+    // useEffect(() => {
+    //     loadNotifications();
+    // }, []);
+
     return (
         <BackgroundGradient style={{flex: 1}} colors={['#1074b9', '#1e93d9']}>
             <DrawerContentScrollView>
@@ -129,8 +142,7 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
                         {/* </View> */}
                         <View style={styles.userInformation}>
                             <Text style={styles.textInformationName}>
-                                {/* {user.name} */}
-                                Diego Ivan Pacori Anccasi
+                                {user.name}
                             </Text>
                             <Text style={styles.textInformationEmail}>
                                 {user.email}
@@ -168,6 +180,13 @@ const MenuInterno = (props: DrawerContentComponentProps) => {
                                 </Text>
                             </View>
                         </View>
+                        {/* {notifications.map((notification) => (
+                            <View>
+                                <Text>
+                                    {notification.status}
+                                </Text>
+                            </View>
+                        ))} */}
                     </View>
 
                 </View>

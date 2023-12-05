@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { Alert, Dimensions, ScrollView, View } from 'react-native';
+import { Alert, Dimensions, View } from 'react-native';
 
 import { EmptyDateData } from '../components/EmptyDateData';
 import { DateDataItem } from '../components/DateDataItem';
@@ -15,7 +15,7 @@ import { convertDates } from '../helpers/convertDates';
 import { LoadingScreen } from './LoadingScreen';
 import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 
-const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+const {width: windowWidth} = Dimensions.get('window');
 
 interface Props extends DrawerScreenProps<any, any>{}
 export const SchedulerScreen = React.memo(({navigation}: Props) => {

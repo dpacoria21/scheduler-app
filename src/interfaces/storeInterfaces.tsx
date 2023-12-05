@@ -12,10 +12,10 @@ export interface Event {
     description: string;
     start:       string;
     end:         string;
+    participants: UserStore[];
     color?: string,
     todos:       Todo[];
 }
-
 
 export interface Todo {
     id:          string;

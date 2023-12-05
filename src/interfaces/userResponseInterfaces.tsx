@@ -21,6 +21,7 @@ export interface EventResponse {
     start:       string;
     end:         string;
     user?: UserStore;
+    participants: UserStore[];
     todos:       Todo[];
 }
 

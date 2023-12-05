@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Dimensions, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { SubmitEvent } from '../interfaces/events';
@@ -14,6 +14,10 @@ import { DrawerScreenProps } from '@react-navigation/drawer';
 import { RootStackParams } from '../navigators/ScheduleNavigator';
 import { ColorPicker } from 'react-native-color-picker';
 import { fromHsv } from 'react-native-color-picker';
+import { SearchInput } from '../components/SearchInput';
+import { UserStore } from '../interfaces/storeInterfaces';
+import { schedulerApi } from '../api/schedulerApi';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -21,6 +25,20 @@ interface Props extends DrawerScreenProps<RootStackParams, 'CreateEventScreen'>{
 export const CreateEventScreen = ({route}: Props) => {
 
     let {event} = route.params ?? {};
+
+    console.log(event);
+
+    const [term, setTerm] = useState('');
+    const [users, setUsers] = useState<UserStore[]>([]);
+    const [participants, setParticipants] = useState<UserStore[]>(event?.participants || []);
+
+    const addParticipant = (newParticipant: UserStore) => {
+        if (participants.some((participant) => participant.id === newParticipant.id)) {return;}
+        setParticipants([
+            ...participants,
+            newParticipant,
+        ]);
+    };
 
     const {goBack} = useNavigation();
     const {top} = useSafeAreaInsets();
@@ -43,10 +61,12 @@ export const CreateEventScreen = ({route}: Props) => {
                 ...event,
                 ...data,
                 color: currentColor.current,
+                participants,
             };
             dispatch(startUpdateEvent(event));
         } else {
             data.color = currentColor.current;
+            data.participants = participants;
             dispatch(startCreateEvent(data));
         }
 
@@ -58,6 +78,25 @@ export const CreateEventScreen = ({route}: Props) => {
         });
         goBack();
     };
+
+    const searchUsers = async(searchText: string) => {
+        const {data} = await schedulerApi.get<UserStore[]>('/users/search', {
+            params: {
+                name: searchText,
+                email: searchText,
+            },
+        });
+        setUsers([...data]);
+    };
+
+    useEffect(() => {
+
+        if (term.length === 0) {
+            return setUsers([]);
+        }
+
+        searchUsers(term);
+    }, [term]);
 
     return (
         <KeyboardAvoidingView
@@ -73,16 +112,13 @@ export const CreateEventScreen = ({route}: Props) => {
                             (event) ? 'Editando evento' : 'Creando evento'
                         }</Text>
 
-                        <View>
-                            {/* Espacio para crear el debouncer con los participantes */}
-                        </View>
-
                         <View style={{
                             flex: 1,
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
                             <View style={styles.containerForm}>
+
                                 <Controller
                                     control={control}
                                     rules={{
@@ -126,6 +162,50 @@ export const CreateEventScreen = ({route}: Props) => {
                                     )}
                                     name="end"
                                 />
+
+                                <View style={{width: windowWidth - 80, gap: 8}}>
+                                    <Text style={{
+                                        fontWeight: '600',
+                                        color:'rgba(0, 0, 0, 0.4)',
+                                        fontSize: 14,
+                                    }}>Agregar usuario</Text>
+                                    <SearchInput
+                                        onDebounce={(value) => setTerm(value)}
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                    />
+
+                                    {
+                                        users.map((user) => (
+                                            <TouchableOpacity
+                                                onPress={() => addParticipant(user)}
+                                                activeOpacity={0.8}
+                                                key={user.id}
+                                                style={{backgroundColor: '#0d35a2', padding: 5, borderRadius: 5}}
+                                            >
+                                                <Text style={{color: '#f1f1f1'}}>{user.name}</Text>
+                                            </TouchableOpacity>
+                                        ))
+                                    }
+
+                                    <Text style={{
+                                        fontWeight: '600',
+                                        color:'rgba(0, 0, 0, 0.4)',
+                                        fontSize: 14,
+                                    }}>
+                                        Usuarios agregados:
+                                    </Text>
+                                    {
+                                        participants.map((participant) => (
+                                            <View key={participant.id} style={{backgroundColor: '#b1ddff', padding: 5, borderRadius: 5}}>
+                                                <Text style={{color: '#081d5e'}}>
+                                                    * {participant.name}
+                                                </Text>
+                                            </View>
+                                        ))
+                                    }
+                                </View>
 
                                 <View style={{flex: 1}}>
                                     <Text style={{

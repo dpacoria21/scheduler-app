@@ -11,7 +11,8 @@ export const startSetActiveEvent = (event: Event) => {
     };
 };
 
-export const startCreateEvent = ({title, description, start, end, color}: SubmitEvent) => {
+export const startCreateEvent = ({title, description, start, end, color, participants = []}: SubmitEvent) => {
+    //Agrega correctamente a los usuarios
     return async(dispatch: Dispatch) => {
         try {
             const {data} = await schedulerApi.post<EventResponse>('/events', {
@@ -21,6 +22,17 @@ export const startCreateEvent = ({title, description, start, end, color}: Submit
                 end,
                 color,
             });
+
+            console.log(participants);
+
+            if (participants.length !== 0){
+                const promises = participants.map((participant) => {
+                    return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
+                });
+                console.log(promises);
+                const addUsers: any = await Promise.all(promises);
+                console.log(addUsers);
+            }
 
             delete data.user;
 
@@ -70,6 +82,17 @@ export const startUpdateEvent = (event: Event) => {
                 end,
                 color,
             });
+
+            // if (participants.length !== 0){
+            //     console.log(participants);
+            //     const promises = participants.map((participant) => {
+            //         return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
+            //     });
+            //     // console.log(promises);
+            //     const addUsers: any = await Promise.all(promises);
+            //     // console.log(addUsers);
+            // }
+
             dispatch(onUpdateEvent(data));
         } catch (error) {
             console.log(error);
