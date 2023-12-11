@@ -19,6 +19,7 @@ export const startSetActiveEvent = (event: Event) => {
 export const startCreateEvent = ({title, description, start, end, color, participants = []}: SubmitEvent) => {
     //Agrega correctamente a los usuarios
     return async(dispatch: Dispatch) => {
+
         try {
             dispatch(onCheckingEvents());
             const {data} = await schedulerApi.post<EventResponse>('/events', {
@@ -33,13 +34,11 @@ export const startCreateEvent = ({title, description, start, end, color, partici
                 const promises = participants.map((participant) => {
                     return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
                 });
-                console.log(promises);
-                const addUsers: any = await Promise.all(promises);
-                console.log(addUsers);
+                await Promise.all(promises);
+                data.participants = participants;
             }
 
             delete data.user;
-
             dispatch(onAddNewEvent(data));
 
         } catch (error) {
@@ -72,13 +71,13 @@ export const startDeleteEvent = (event: Event) => {
     };
 };
 
-export const startUpdateEvent = (event: Event) => {
+export const startUpdateEvent = (event: Event, pastParticipants: any) => {
     return async(dispatch: Dispatch) => {
         try {
 
             dispatch(onCheckingEvents());
 
-            const {id, title, description, start, end, color} = event;
+            const {id, title, description, start, end, color, participants} = event;
 
             const {data} = await schedulerApi.patch<Event>(`/events/${id}`, {
                 title,
@@ -88,16 +87,14 @@ export const startUpdateEvent = (event: Event) => {
                 color,
             });
 
-            // if (participants.length !== 0){
-            //     console.log(participants);
-            //     const promises = participants.map((participant) => {
-            //         return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
-            //     });
-            //     // console.log(promises);
-            //     const addUsers: any = await Promise.all(promises);
-            //     // console.log(addUsers);
-            // }
-
+            if (participants.length !== 0){
+                const newParticipants = participants.filter((participant) => !pastParticipants.some((pastParticipant: any) => (pastParticipant?.user?.id ?? pastParticipant.id) === participant.id));
+                const promises = newParticipants.map((participant) => {
+                    return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
+                });
+                await Promise.all(promises);
+                data.participants = participants;
+            }
             dispatch(onUpdateEvent(data));
         } catch (error) {
             console.log(error);

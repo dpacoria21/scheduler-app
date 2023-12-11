@@ -20,6 +20,7 @@ import { schedulerApi } from '../api/schedulerApi';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FloatButton } from '../components/FloatButton';
 import { onClearTodos } from '../store/todos/todosSlice';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -30,7 +31,7 @@ export const CreateEventScreen = ({route}: Props) => {
 
     const [term, setTerm] = useState('');
     const [users, setUsers] = useState<UserStore[]>([]);
-    const [participants, setParticipants] = useState<UserStore[]>(event?.participants || []);
+    const [participants, setParticipants] = useState<UserStore[]>(event?.participants?.map((participant: any) => participant.user ?? participant) || []);
 
     const addParticipant = (newParticipant: UserStore) => {
         if (participants.some((participant) => participant.id === newParticipant.id)) {return;}
@@ -56,6 +57,8 @@ export const CreateEventScreen = ({route}: Props) => {
 
     const onSubmit = (data: SubmitEvent) => {
 
+        const pastParticipants = event?.participants ?? [];
+
         if (event) {
             event = {
                 ...event,
@@ -63,7 +66,7 @@ export const CreateEventScreen = ({route}: Props) => {
                 color: currentColor.current,
                 participants,
             };
-            dispatch(startUpdateEvent(event));
+            dispatch(startUpdateEvent(event, pastParticipants));
         } else {
             data.color = currentColor.current;
             data.participants = participants;
@@ -200,9 +203,14 @@ export const CreateEventScreen = ({route}: Props) => {
                                                     onPress={() => addParticipant(user)}
                                                     activeOpacity={0.8}
                                                     key={user.id}
-                                                    style={{backgroundColor: '#0d35a2', padding: 8, marginTop: -5, borderRadius: 3}}
+                                                    style={{backgroundColor: '#0d35a2', padding: 8, marginTop: -5, borderRadius: 3, flexDirection: 'row', alignItems: 'center', gap: 10}}
                                                 >
-                                                    <Text style={{color: '#f1f1f1'}}>{user.name}</Text>
+                                                    <Icon
+                                                        name="person-add-outline"
+                                                        size={20}
+                                                        color={'#eff8ff'}
+                                                    />
+                                                    <Text style={{color: '#f1f1f1', fontSize: 15}}>{user.name}</Text>
                                                 </TouchableOpacity>
                                             ))
                                         }
@@ -216,9 +224,23 @@ export const CreateEventScreen = ({route}: Props) => {
                                         </Text>
                                         {
                                             participants.map((participant) => (
-                                                <View key={participant.id} style={{backgroundColor: '#1d468b', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 3, marginTop: -5}}>
+                                                <View key={participant.id} style={{
+                                                    backgroundColor: '#1d468b',
+                                                    paddingVertical: 8,
+                                                    paddingHorizontal: 20,
+                                                    borderRadius: 3,
+                                                    marginTop: -5,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 10,
+                                                }}>
+                                                    <Icon
+                                                        name="person-circle-outline"
+                                                        size={25}
+                                                        color={'#eff8ff'}
+                                                    />
                                                     <Text style={{color: '#eff8ff', fontWeight: '600', fontSize: 16}}>
-                                                    * {participant.name}
+                                                        {participant.name}
                                                     </Text>
                                                 </View>
                                             ))
