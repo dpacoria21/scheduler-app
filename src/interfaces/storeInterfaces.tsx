@@ -22,3 +22,11 @@ export interface Todo {
     description: string;
     done:        boolean;
 }
+
+export type InvitationStatus = 'accepted' | 'rejected' | 'unreplied';
+
+export interface Invitation {
+    id: string,
+    status: InvitationStatus,
+    event: Event | null,
+}
