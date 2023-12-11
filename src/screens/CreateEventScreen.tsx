@@ -18,6 +18,8 @@ import { SearchInput } from '../components/SearchInput';
 import { UserStore } from '../interfaces/storeInterfaces';
 import { schedulerApi } from '../api/schedulerApi';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { FloatButton } from '../components/FloatButton';
+import { onClearTodos } from '../store/todos/todosSlice';
 
 const {width: windowWidth} = Dimensions.get('window');
 
@@ -25,8 +27,6 @@ interface Props extends DrawerScreenProps<RootStackParams, 'CreateEventScreen'>{
 export const CreateEventScreen = ({route}: Props) => {
 
     let {event} = route.params ?? {};
-
-    console.log(event);
 
     const [term, setTerm] = useState('');
     const [users, setUsers] = useState<UserStore[]>([]);
@@ -104,141 +104,160 @@ export const CreateEventScreen = ({route}: Props) => {
             style={{flex:1}}
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <>
+                    <FloatButton
+                        color="#1f4dd6"
+                        icon="arrow-back-outline"
+                        fn={() => {
+                            dispatch(onClearTodos());
+                            goBack();
+                        }}
+                        style={{
+                            position: 'absolute',
+                            left: 15,
+                            top: 15,
+                        }}
+                        styleButton={{
+                            backgroundColor: '#c0dafd',
+                        }}
+                    />
 
-                <ScrollView style={styles.container}>
-                    <View style={{alignItems: 'center', gap: 25}}>
+                    <ScrollView style={{...styles.container, paddingTop: 45}}>
 
-                        <Text style={{...styles.title, marginTop: top + 20}}>{
-                            (event) ? 'Editando evento' : 'Creando evento'
-                        }</Text>
+                        <View style={{alignItems: 'center', gap: 25}}>
 
-                        <View style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <View style={styles.containerForm}>
+                            <Text style={{...styles.title, marginTop: top + 20}}>{
+                                (event) ? 'Editando evento' : 'Creando evento'
+                            }</Text>
 
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({field: {onChange, value, onBlur}}) => (
-                                        <Input style={{height: 40}} errors={errors.title} onBlur={onBlur} onChange={onChange} value={value} label="Título" placeholder="ej. Hacer tarea" keyboardType="default"/>
-                                    )}
-                                    name="title"
-                                />
+                            <View style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <View style={styles.containerForm}>
 
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({field: {onChange, value, onBlur}}) => (
-                                        <Input style={{height: 40}} errors={errors.description} onBlur={onBlur} onChange={onChange} value={value} label="Descripción" placeholder="ej. descripción..." keyboardType="default"/>
-                                    )}
-                                    name="description"
-                                />
-
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({field: {onChange, value}}) => (
-                                        <DateInput onChange={onChange} title="Fecha de inicio" value={value}/>
-                                    )}
-                                    name="start"
-                                />
-
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                    }}
-                                    render={({field: {onChange, value}}) => (
-                                        <DateInput onChange={onChange} title="Fecha de finalización" value={value} minimunDate={watch('start')}/>
-                                    )}
-                                    name="end"
-                                />
-
-                                <View style={{width: windowWidth - 80, gap: 8}}>
-                                    <Text style={{
-                                        fontWeight: '600',
-                                        color:'rgba(0, 0, 0, 0.4)',
-                                        fontSize: 14,
-                                    }}>Agregar usuario</Text>
-                                    <SearchInput
-                                        onDebounce={(value) => setTerm(value)}
-                                        style={{
-                                            width: '100%',
+                                    <Controller
+                                        control={control}
+                                        rules={{
+                                            required: true,
                                         }}
+                                        render={({field: {onChange, value, onBlur}}) => (
+                                            <Input style={{height: 40}} errors={errors.title} onBlur={onBlur} onChange={onChange} value={value} label="Título" placeholder="ej. Hacer tarea" keyboardType="default"/>
+                                        )}
+                                        name="title"
                                     />
 
-                                    {
-                                        users.map((user) => (
-                                            <TouchableOpacity
-                                                onPress={() => addParticipant(user)}
-                                                activeOpacity={0.8}
-                                                key={user.id}
-                                                style={{backgroundColor: '#0d35a2', padding: 5, borderRadius: 5}}
-                                            >
-                                                <Text style={{color: '#f1f1f1'}}>{user.name}</Text>
-                                            </TouchableOpacity>
-                                        ))
-                                    }
+                                    <Controller
+                                        control={control}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({field: {onChange, value, onBlur}}) => (
+                                            <Input style={{height: 40}} errors={errors.description} onBlur={onBlur} onChange={onChange} value={value} label="Descripción" placeholder="ej. descripción..." keyboardType="default"/>
+                                        )}
+                                        name="description"
+                                    />
 
-                                    <Text style={{
-                                        fontWeight: '600',
-                                        color:'rgba(0, 0, 0, 0.4)',
-                                        fontSize: 14,
-                                    }}>
-                                        Usuarios agregados:
-                                    </Text>
-                                    {
-                                        participants.map((participant) => (
-                                            <View key={participant.id} style={{backgroundColor: '#b1ddff', padding: 5, borderRadius: 5}}>
-                                                <Text style={{color: '#081d5e'}}>
-                                                    * {participant.name}
-                                                </Text>
-                                            </View>
-                                        ))
-                                    }
-                                </View>
+                                    <Controller
+                                        control={control}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({field: {onChange, value}}) => (
+                                            <DateInput onChange={onChange} title="Fecha de inicio" value={value}/>
+                                        )}
+                                        name="start"
+                                    />
 
-                                <View style={{flex: 1}}>
-                                    <Text style={{
-                                        fontSize: 15,
-                                        color: 'rgba(0, 0, 0, 0.4)',
-                                        fontWeight: '500',
-                                    }}>
-                                        Elige un color
-                                    </Text>
-                                    <View style={{flex:1, alignItems: 'center'}}>
-                                        <ColorPicker
-                                            onColorChange={(selectedColor) =>{
-                                                currentColor.current = fromHsv(selectedColor);
-                                            }}
-                                            hideSliders
-                                            defaultColor={'#c0d3fd'}
+                                    <Controller
+                                        control={control}
+                                        rules={{
+                                            required: true,
+                                        }}
+                                        render={({field: {onChange, value}}) => (
+                                            <DateInput onChange={onChange} title="Fecha de finalización" value={value} minimunDate={watch('start')}/>
+                                        )}
+                                        name="end"
+                                    />
+
+                                    <View style={{width: windowWidth - 80, gap: 8}}>
+                                        <Text style={{
+                                            fontWeight: '600',
+                                            color:'rgba(0, 0, 0, 0.4)',
+                                            fontSize: 14,
+                                        }}>Agregar usuario</Text>
+                                        <SearchInput
+                                            onDebounce={(value) => setTerm(value)}
                                             style={{
-                                                width: 200,
-                                                height: 200,
+                                                width: '100%',
                                             }}
                                         />
+
+                                        {
+                                            users.map((user) => (
+                                                <TouchableOpacity
+                                                    onPress={() => addParticipant(user)}
+                                                    activeOpacity={0.8}
+                                                    key={user.id}
+                                                    style={{backgroundColor: '#0d35a2', padding: 8, marginTop: -5, borderRadius: 3}}
+                                                >
+                                                    <Text style={{color: '#f1f1f1'}}>{user.name}</Text>
+                                                </TouchableOpacity>
+                                            ))
+                                        }
+
+                                        <Text style={{
+                                            fontWeight: '600',
+                                            color:'rgba(0, 0, 0, 0.4)',
+                                            fontSize: 14,
+                                        }}>
+                                        Usuarios agregados:
+                                        </Text>
+                                        {
+                                            participants.map((participant) => (
+                                                <View key={participant.id} style={{backgroundColor: '#1d468b', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 3, marginTop: -5}}>
+                                                    <Text style={{color: '#eff8ff', fontWeight: '600', fontSize: 16}}>
+                                                    * {participant.name}
+                                                    </Text>
+                                                </View>
+                                            ))
+                                        }
                                     </View>
+
+                                    <View style={{flex: 1}}>
+                                        <Text style={{
+                                            fontSize: 15,
+                                            color: 'rgba(0, 0, 0, 0.4)',
+                                            fontWeight: '500',
+                                        }}>
+                                        Elige un color
+                                        </Text>
+                                        <View style={{flex:1, alignItems: 'center'}}>
+                                            <ColorPicker
+                                                onColorChange={(selectedColor) =>{
+                                                    currentColor.current = fromHsv(selectedColor);
+                                                }}
+                                                hideSliders
+                                                defaultColor={'#c0d3fd'}
+                                                style={{
+                                                    width: 200,
+                                                    height: 200,
+                                                }}
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={{}}>
+                                        <ButtonSubmit title={(event) ? 'Editar evento' : 'Crear evento'} handleSubmit={handleSubmit} onSubmit={onSubmit}/>
+                                    </View>
+                                    {/* Espacio para poder hacer scroll */}
+                                    <View style={{height: 60}} />
                                 </View>
-                                <View style={{}}>
-                                    <ButtonSubmit title={(event) ? 'Editar evento' : 'Crear evento'} handleSubmit={handleSubmit} onSubmit={onSubmit}/>
-                                </View>
-                                {/* Espacio para poder hacer scroll */}
-                                <View style={{height: 60}} />
                             </View>
                         </View>
-                    </View>
 
-                </ScrollView>
+                    </ScrollView>
+                </>
 
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

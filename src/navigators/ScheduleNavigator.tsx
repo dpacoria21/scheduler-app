@@ -1,5 +1,5 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, createDrawerNavigator } from '@react-navigation/drawer';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { AboutScreen } from '../screens/AboutScreen';
 import { SchedulerScreen } from '../screens/SchedulerScreen';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
@@ -17,8 +17,6 @@ import { Event } from '../interfaces/storeInterfaces';
 import { startLoadEvents } from '../store/calendar/thunks';
 import { BackgroundGradient } from '../components/BackgroundGradient';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { schedulerApi } from '../api/schedulerApi';
-import { Notification } from '../interfaces/notification';
 
 interface ItemScreen {
     title: string,
@@ -55,7 +53,7 @@ export type RootStackParams = {
     SchedulerScreen: undefined,
     AboutScreen: undefined,
     TodosScreen: undefined,
-    CreateEventScreen: {event?: Event},
+    CreateEventScreen: {event: Event},
     SchedulerDayViewScreen: {date: DateData}
     SchedulerWeekViewScreen: undefined,
 }
@@ -87,7 +85,7 @@ export const SchedulerNavigator = () => {
             <Drawer.Screen name="SchedulerScreen" component={SchedulerScreen} />
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
             <Drawer.Screen name="TodosScreen" options={{headerShown: false, unmountOnBlur: true}} component={TodosScreen} />
-            <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true}} component={CreateEventScreen} />
+            <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true, headerShown: false}} component={CreateEventScreen} />
             <Drawer.Screen name="SchedulerDayViewScreen" options={{unmountOnBlur: true}} component={SchedulerDayViewScreen} />
             <Drawer.Screen name="SchedulerWeekViewScreen" component={SchedulerWeekViewScreen} />
         </Drawer.Navigator>

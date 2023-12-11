@@ -14,7 +14,7 @@ interface Props {
 export const FloatButton = ({style, styleButton, color, icon, fn, size = 35}: Props) => {
 
     return (
-        <View style={{...style as any}}>
+        <View style={{...style as any, zIndex: 999}}>
             <TouchableOpacity activeOpacity={0.7} onPress={fn}>
                 <Icon
                     name={icon}

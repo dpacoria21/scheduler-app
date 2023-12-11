@@ -87,14 +87,6 @@ export const CreateTodoModal = () => {
                                 }}
                             />
                         </TouchableOpacity>
-                        <Text style={{
-                            textAlign: 'center',
-                            fontSize: 20,
-                            fontWeight: '600',
-                            color: '#5780fd',
-                        }}>
-                            Crear Todo
-                        </Text>
 
                         <Controller
                             control={control}
@@ -127,7 +119,7 @@ export const CreateTodoModal = () => {
                             )}
                             name="done"
                         />
-                        <ButtonSubmit title="Crear evento" handleSubmit={handleSubmit} onSubmit={onSubmit}/>
+                        <ButtonSubmit title="Crear tarea" handleSubmit={handleSubmit} onSubmit={onSubmit}/>
 
                     </View>
                 </View>
