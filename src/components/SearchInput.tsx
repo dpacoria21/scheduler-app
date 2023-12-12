@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     textBackground: {
         backgroundColor: '#b1d3ff',
         borderRadius: 5,
-        height: 40,
         color: '#0a5dff',
         paddingHorizontal: 20,
         justifyContent: 'center',
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     textInput: {
-        top: 1,
+        // top: 1,
         flex: 1,
         fontSize: 18,
         color: '#0a5dff',

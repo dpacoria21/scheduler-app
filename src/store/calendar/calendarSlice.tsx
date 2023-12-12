@@ -20,12 +20,7 @@ export const calendarSlice = createSlice({
     reducers: {
         onLoadEvents: (state, {payload = []}: PayloadAction<Event[]>) => {
             state.isLoading = false;
-            payload.forEach(event => {
-                const exist = state.events.some(dbEvent => dbEvent.id === event.id);
-                if (!exist) {
-                    state.events.push(event);
-                }
-            });
+            state.events = payload;
         },
 
         onSetActiveEvent: (state, {payload}: PayloadAction<Event>) => {

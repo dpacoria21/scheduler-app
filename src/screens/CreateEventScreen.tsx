@@ -261,7 +261,7 @@ export const CreateEventScreen = ({route}: Props) => {
                                                     currentColor.current = fromHsv(selectedColor);
                                                 }}
                                                 hideSliders
-                                                defaultColor={'#c0d3fd'}
+                                                defaultColor={event?.color ?? '#c0d3fd'}
                                                 style={{
                                                     width: 200,
                                                     height: 200,

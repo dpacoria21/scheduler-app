@@ -35,9 +35,11 @@ export const useInvitationStore = () => {
                 status,
             });
 
-            invitation.status = status;
-
-            dispatch(onResponseInvitation(invitation));
+            const newInvitation = {
+                ...invitation,
+                status,
+            };
+            dispatch(onResponseInvitation(newInvitation));
 
         } catch (error: any) {
             console.log(error);

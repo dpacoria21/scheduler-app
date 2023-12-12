@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useInvitationStore } from '../hooks/useInvitationStore';
 import { useAppDispatch } from '../store/store';
 import { startLoadEvents } from '../store/calendar/thunks';
+import { LoadingScreen } from './LoadingScreen';
+import { FloatButton } from '../components/FloatButton';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -16,7 +18,7 @@ export const NotificationScreen = (props: Props) => {
 
 
     const invitation = props.route.params.invitation;
-    const {startResponseInvitation} = useInvitationStore();
+    const {startResponseInvitation, isLoading} = useInvitationStore();
     const {navigation} = props;
     const dispatch = useAppDispatch();
 
@@ -24,7 +26,7 @@ export const NotificationScreen = (props: Props) => {
         Alert.alert('Rechazar invitación', '¿Está seguro de rechazar la invitación?', [
             {
                 text: 'Cancel',
-                onPress: () => navigation.navigate('SchedulerScreen'),
+                onPress: () => navigation.goBack(),
                 style: 'cancel',
             },
             {
@@ -37,83 +39,107 @@ export const NotificationScreen = (props: Props) => {
         ]);
     };
 
-    const acceptedInvitation = () => {
-        startResponseInvitation(invitation, 'accepted');
+    const acceptedInvitation = async() => {
+        await startResponseInvitation(invitation, 'accepted');
         dispatch(startLoadEvents());
-        navigation.navigate('SchedulerScreen');
+        navigation.goBack();
     };
 
     return (
         <View style={styles.container}>
 
-            <View style={{...styles.notificationContainer, backgroundColor: invitation.event?.color}}>
-                <Text style={styles.notificationTitle}>{invitation.event?.title}</Text>
-                <View>
-                    <Text style={styles.notificationSubtitle}>
+            {
+                isLoading
+                    ? <LoadingScreen />
+                    :
+                    <>
+                        <FloatButton
+                            color="#1f4dd6"
+                            icon="arrow-back-outline"
+                            fn={() => {
+                                navigation.goBack();
+                            }}
+                            style={{
+                                position: 'absolute',
+                                left: 15,
+                                top: 15,
+                            }}
+                            styleButton={{
+                                backgroundColor: '#c0dafd',
+                            }}
+                        />
+                        <View style={{...styles.notificationContainer, backgroundColor: invitation.event?.color}}>
+                            <Text style={styles.notificationTitle}>{invitation.event?.title}</Text>
+                            <View>
+                                <Text style={styles.notificationSubtitle}>
                         Fechas:
-                    </Text>
-                    <Text style={styles.notificationDate}>
+                                </Text>
+                                <Text style={styles.notificationDate}>
                         Inicia: {new Date(invitation.event!.start).toLocaleDateString('es-PE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            hour12: true,
-                        })}
-                    </Text>
-                    <Text style={styles.notificationDate}>
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </Text>
+                                <Text style={styles.notificationDate}>
                         Termina: {new Date(invitation.event!.end).toLocaleDateString('es-PE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                            hour12: true,
-                        })}
-                    </Text>
-                </View>
-                <View>
-                    <Text style={styles.notificationSubtitle}>
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </Text>
+                            </View>
+                            <View>
+                                <Text style={styles.notificationSubtitle}>
                         Descripción:
-                    </Text>
-                    <Text style={{...styles.notificationDescription, fontSize: 15, color: '#404040'}}>
-                        {invitation.event?.description}
-                    </Text>
-                </View>
-            </View>
+                                </Text>
+                                <Text style={{...styles.notificationDescription, fontSize: 15, color: '#404040'}}>
+                                    {invitation.event?.description}
+                                </Text>
+                            </View>
+                        </View>
 
-            {/* Botones */}
-            <View
-                style={styles.buttonsContainer}
-            >
+                        {/* Botones */}
+                        <View
+                            style={styles.buttonsContainer}
+                        >
 
 
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={canceledInvitation}
-                    style={{...styles.button, backgroundColor: '#ff3131'}}
-                >
-                    <Icon
-                        name="close-outline"
-                        size={30}
-                        color={'#fff1f1'}
-                    />
-                    <Text style={{...styles.buttonText, color: '#fff1f1'}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={canceledInvitation}
+                                style={{...styles.button, backgroundColor: '#ff3131'}}
+                            >
+                                <Icon
+                                    name="close-outline"
+                                    size={30}
+                                    color={'#fff1f1'}
+                                />
+                                <Text style={{...styles.buttonText, color: '#fff1f1'}}>
                         Rechazar
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={acceptedInvitation}
-                    style={styles.button}
-                >
-                    <Icon
-                        name="checkmark-outline"
-                        size={30}
-                        color={'#cdfec9'}
-                    />
-                    <Text style={{...styles.buttonText, color: '#e8ffe6'}}>
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={acceptedInvitation}
+                                style={styles.button}
+                            >
+                                <Icon
+                                    name="checkmark-outline"
+                                    size={30}
+                                    color={'#cdfec9'}
+                                />
+                                <Text style={{...styles.buttonText, color: '#e8ffe6'}}>
                         Aceptar
-                    </Text>
-                </TouchableOpacity>
-            </View>
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </>
+            }
+
+
         </View>
     );
 };
