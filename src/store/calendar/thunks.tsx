@@ -23,15 +23,11 @@ export const startCreateEvent = ({title, description, start, end, color, partici
                 color,
             });
 
-            console.log(participants);
-
             if (participants.length !== 0){
                 const promises = participants.map((participant) => {
                     return schedulerApi.post(`/events/${data.id}/participants`, {idUser: participant.id});
                 });
-                console.log(promises);
                 const addUsers: any = await Promise.all(promises);
-                console.log(addUsers);
             }
 
             delete data.user;

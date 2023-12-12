@@ -26,8 +26,6 @@ export const CreateEventScreen = ({route}: Props) => {
 
     let {event} = route.params ?? {};
 
-    console.log(event);
-
     const [term, setTerm] = useState('');
     const [users, setUsers] = useState<UserStore[]>([]);
     const [participants, setParticipants] = useState<UserStore[]>(event?.participants || []);
