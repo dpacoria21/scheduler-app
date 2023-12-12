@@ -1,9 +1,10 @@
 import { SubmitEvent } from '../../interfaces/events';
 import { schedulerApi } from '../../api/schedulerApi';
 import { EventResponse } from '../../interfaces/userResponseInterfaces';
-import { onAddNewEvent, onCheckingEvents, onDeleteActiveEvent, onDeleteEvent, onLoadEvents, onSetActiveEvent, onUpdateEvent } from './calendarSlice';
+import { onAddNewEvent, onCheckingEvents, onDeleteActiveEvent, onDeleteEvent, onLoadEvents, onSetActiveEvent, onUncheckingEvents, onUpdateEvent } from './calendarSlice';
 import { Dispatch } from '@reduxjs/toolkit';
 import { Event } from '../../interfaces/storeInterfaces';
+import { Alert } from 'react-native';
 
 export const startSetActiveEvent = (event: Event) => {
     return async(dispatch: Dispatch) => {
@@ -41,8 +42,10 @@ export const startCreateEvent = ({title, description, start, end, color, partici
             delete data.user;
             dispatch(onAddNewEvent(data));
 
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingEvents());
+            Alert.alert(error.response.data.message);
         }
     };
 };
@@ -53,8 +56,10 @@ export const startLoadEvents = () => {
             dispatch(onCheckingEvents());
             const {data} = await schedulerApi.get<Event[]>('/events/me');
             dispatch(onLoadEvents(data));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingEvents());
+            Alert.alert(error.response.data.message);
         }
     };
 };
@@ -65,8 +70,10 @@ export const startDeleteEvent = (event: Event) => {
             dispatch(onCheckingEvents());
             await schedulerApi.delete(`/events/${event.id}`);
             dispatch(onDeleteEvent(event));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingEvents());
+            Alert.alert(error.response.data.message);
         }
     };
 };
@@ -96,8 +103,10 @@ export const startUpdateEvent = (event: Event, pastParticipants: any) => {
                 data.participants = participants;
             }
             dispatch(onUpdateEvent(data));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingEvents());
+            Alert.alert(error.response.data.message);
         }
     };
 };

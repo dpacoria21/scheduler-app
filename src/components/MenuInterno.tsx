@@ -1,5 +1,5 @@
 import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-navigation/drawer';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -11,6 +11,7 @@ import { BackgroundGradient } from './BackgroundGradient';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { MenuItem } from './MenuItem';
+import { useInvitationStore } from '../hooks/useInvitationStore';
 
 interface ItemScreen {
     title: string,
@@ -45,6 +46,13 @@ export const MenuInterno = (props: DrawerContentComponentProps) => {
 
     const {user} = useSelector((state: RootState) => state.auth);
     const {navigation} = props;
+
+    const {invitations, startLoadInvitations} = useInvitationStore();
+
+    useEffect(() => {
+        startLoadInvitations();
+    }, []);
+
     return (
         <BackgroundGradient style={{flex: 1}} colors={['#1074b9', '#1e93d9']}>
             <DrawerContentScrollView>
@@ -67,14 +75,11 @@ export const MenuInterno = (props: DrawerContentComponentProps) => {
                     </View>
 
 
-                    {/* <DrawerItemList {...props}/> */}
                     <View style={styles.userContainer}>
-                        {/* <View style={styles.imageContainer}> */}
                         <Image
                             source={require('../assets/profile.png')}
                             style={styles.image}
                         />
-                        {/* </View> */}
                         <View style={styles.userInformation}>
                             <Text style={styles.textInformationName}>
                                 {user.name}
@@ -86,7 +91,7 @@ export const MenuInterno = (props: DrawerContentComponentProps) => {
                     </View>
 
                     <View style={{
-                        gap: 10,
+                        gap: 5,
                     }}>
                         {
                             Screens.map((screen, i) => (
@@ -113,17 +118,44 @@ export const MenuInterno = (props: DrawerContentComponentProps) => {
                             </Text>
                             <View style={styles.notificationCountContainer}>
                                 <Text style={styles.notificationNumber}>
-                                    0
+                                    {invitations.reduce((acum, curr) => {
+                                        if (curr.status === 'unreplied') {
+                                            return acum + 1;
+                                        }
+                                        return acum + 0;
+                                    }, 0)}
                                 </Text>
                             </View>
                         </View>
-                        {/* {notifications.map((notification) => (
-                            <View>
-                                <Text>
-                                    {notification.status}
-                                </Text>
-                            </View>
-                        ))} */}
+                        <View style={{gap: 15, flexDirection:'column', marginTop: 13}}>
+                            {invitations.map((invitation) => (
+                                invitation.status === 'unreplied' &&
+                                <TouchableOpacity onPress={() => navigation.navigate('NotificationScreen', {invitation})} key={invitation.id} activeOpacity={0.7} style={{
+                                    flex:1,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    backgroundColor: '#e2f0fc',
+                                    paddingVertical: 5,
+                                    paddingHorizontal: 20,
+                                    borderRadius: 5,
+                                }}>
+                                    <View>
+                                        <Text numberOfLines={1} style={{...styles.notificationText, color: '#0e5d96', fontWeight: '500', width: 150}}>
+                                            {invitation.event?.title}
+                                        </Text>
+                                        <Text numberOfLines={1} style={{...styles.notificationText, fontSize:14, color: '#1074b9', width: 150}}>
+                                            {invitation.event?.description}
+                                        </Text>
+                                    </View>
+                                    <Icon
+                                        name="mail-unread-outline"
+                                        size={35}
+                                        color={'#104f7c'}
+                                    />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
 
                 </View>

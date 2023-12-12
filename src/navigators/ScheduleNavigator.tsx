@@ -10,9 +10,10 @@ import { TodosScreen } from '../screens/TodosScreen';
 import { DateData } from 'react-native-calendars';
 import { SchedulerDayViewScreen } from '../screens/SchedulerDayViewScreen';
 import { SchedulerWeekViewScreen } from '../screens/SchedulerWeekViewScreen';
-import { Event } from '../interfaces/storeInterfaces';
+import { Event, Invitation } from '../interfaces/storeInterfaces';
 import { startLoadEvents } from '../store/calendar/thunks';
 import { MenuInterno } from '../components/MenuInterno';
+import { NotificationScreen } from '../screens/NotificationScreen';
 
 const windowWitdh = Dimensions.get('window').width;
 
@@ -23,6 +24,7 @@ export type RootStackParams = {
     CreateEventScreen: {event: Event},
     SchedulerDayViewScreen: {date: DateData}
     SchedulerWeekViewScreen: undefined,
+    NotificationScreen: {invitation: Invitation},
 }
 
 const Drawer = createDrawerNavigator<RootStackParams>();
@@ -55,6 +57,7 @@ export const SchedulerNavigator = () => {
             <Drawer.Screen name="AboutScreen" component={AboutScreen} />
             <Drawer.Screen name="CreateEventScreen" options={{unmountOnBlur: true, headerShown: false}} component={CreateEventScreen} />
             <Drawer.Screen name="TodosScreen" options={{headerShown: false, unmountOnBlur: true}} component={TodosScreen} />
+            <Drawer.Screen name="NotificationScreen" options={{headerShown: false, unmountOnBlur: true}} component={NotificationScreen} />
         </Drawer.Navigator>
     );
 };

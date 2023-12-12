@@ -67,7 +67,9 @@ export const calendarSlice = createSlice({
         onCheckingEvents: (state) => {
             state.isLoading = true;
         },
-
+        onUncheckingEvents: (state) => {
+            state.isLoading = false;
+        },
     },
 });
 
@@ -80,4 +82,5 @@ export const {
     onLogoutCalendar,
     onDeleteActiveEvent,
     onCheckingEvents,
+    onUncheckingEvents,
 } = calendarSlice.actions;

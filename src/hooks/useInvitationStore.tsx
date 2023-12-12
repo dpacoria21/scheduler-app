@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch, RootState } from '../store/store';
-import { onCheckingInvitations, onLoadInvitations, onResponseInvitation } from '../store/invitations/invitationSlice';
+import { onCheckingInvitations, onLoadInvitations, onResponseInvitation, onUncheckingInvitations } from '../store/invitations/invitationSlice';
 import { schedulerApi } from '../api/schedulerApi';
 import { Invitation, InvitationStatus } from '../interfaces/storeInterfaces';
+import { Alert } from 'react-native';
 
 export const useInvitationStore = () => {
 
@@ -17,8 +18,10 @@ export const useInvitationStore = () => {
 
             dispatch(onLoadInvitations(data));
 
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingInvitations());
+            Alert.alert(error.response.data.message);
         }
     };
 
@@ -36,8 +39,10 @@ export const useInvitationStore = () => {
 
             dispatch(onResponseInvitation(invitation));
 
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            dispatch(onUncheckingInvitations());
+            Alert.alert(error.response.data.message);
         }
     };
 
