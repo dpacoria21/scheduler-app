@@ -12,6 +12,7 @@ export interface Event {
     description: string;
     start:       string;
     end:         string;
+    user?: UserStore;
     participants: UserStore[];
     color?: string,
     todos:       Todo[];

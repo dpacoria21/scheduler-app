@@ -18,7 +18,9 @@ export const DateDataItem = ({event}: Props) => {
 
     const dispatch = useAppDispatch();
     const {navigate} = useNavigation<DrawerNavigationProp<RootStackParams>>();
-    const {user} = useSelector((state: RootState) => state.auth);
+    const {user: currentUser} = useSelector((state: RootState) => state.auth);
+
+    const user = event?.user ?? currentUser;
 
     const setActiveEvent = () => {
         dispatch(startSetActiveEvent(event));
