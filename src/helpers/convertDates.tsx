@@ -16,8 +16,7 @@ export const convertDates = (events: Event[] = []) => {
 
     events.forEach((event) => {
 
-        const newDateStr = new Date(event.start).toLocaleDateString('en-ZA');
-        const dateStr = newDateStr.replaceAll('/', '-');
+        const dateStr = flatDate(event.start);
 
         if (!Object.hasOwn(dates, dateStr)) {
             dates[dateStr] = [];
@@ -37,4 +36,8 @@ export const convertDates = (events: Event[] = []) => {
         }
     });
     return dates;
+};
+
+export const flatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-ZA').replaceAll('/', '-');
 };

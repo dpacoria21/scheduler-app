@@ -35,7 +35,7 @@ export const SearchInput = ({style, onDebounce}: Props) => {
                 <Icon
                     name="search-outline"
                     size={30}
-                    color={'#000'}
+                    color={'#0a5dff'}
                 />
             </View>
         </View>
@@ -48,9 +48,10 @@ const styles = StyleSheet.create({
         // marginHorizontal: 20,
     },
     textBackground: {
-        backgroundColor: '#f3f1f3',
+        backgroundColor: '#b1d3ff',
         borderRadius: 5,
         height: 40,
+        color: '#0a5dff',
         paddingHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -58,16 +59,17 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 1,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
 
-        elevation: 5,
+        elevation: 2,
     },
     textInput: {
         top: 1,
         flex: 1,
         fontSize: 18,
+        color: '#0a5dff',
     },
 });

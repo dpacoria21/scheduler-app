@@ -7,15 +7,17 @@ import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
 import { getFormatHourTime } from '../helpers/getFormatHourTime';
 import { useSelector } from 'react-redux';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { RootStackParams } from '../navigators/ScheduleNavigator';
 
 interface Props {
-    event: Event
+    event: Event,
 }
 
 export const DateDataItem = ({event}: Props) => {
 
     const dispatch = useAppDispatch();
-    const {navigate}  = useNavigation();
+    const {navigate} = useNavigation<DrawerNavigationProp<RootStackParams>>();
     const {user} = useSelector((state: RootState) => state.auth);
 
     const setActiveEvent = () => {

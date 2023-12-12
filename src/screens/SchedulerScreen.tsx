@@ -1,30 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { Alert, Dimensions, View } from 'react-native';
 
-import { EmptyDateData } from '../components/EmptyDateData';
-import { DateDataItem } from '../components/DateDataItem';
 import { FloatButton } from '../components/FloatButton';
 
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { startDeleteEvent } from '../store/calendar/thunks';
 
-import { Agenda } from 'react-native-calendars';
-import { convertDates } from '../helpers/convertDates';
-import { LoadingScreen } from './LoadingScreen';
 import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
+import { ViewAgenda } from '../components/ViewAgenda';
 
 const {width: windowWidth} = Dimensions.get('window');
 
 interface Props extends DrawerScreenProps<any, any>{}
-export const SchedulerScreen = React.memo(({navigation}: Props) => {
-
-    const {events, isLoading, activeEvent} = useSelector((state: RootState) => state.calendar);
+export const SchedulerScreen = ({navigation}: Props) => {
 
     const dispatch = useAppDispatch();
-
-    const [futureMonths, setFutureMonths] = useState(3);
+    const {events, activeEvent} = useSelector((state: RootState) => state.calendar);
 
     const navigateToAddEvent = () => {
         navigation.navigate('CreateEventScreen');
@@ -52,31 +45,8 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
         <View style={{
             flex:1,
         }}>
-            {
-                (isLoading) ?
-                    (
-                        <LoadingScreen />
-                    ) :
-                    (
-                        <Agenda
-                            showOnlySelectedDayItems
-                            items={convertDates(events)}
-                            renderItem={(reservation : any) => <DateDataItem event={reservation.event}/>}
-                            renderEmptyData={() => <EmptyDateData message="No existe ningún evento creado para el día de hoy"/>}
-                            keyExtractor={(item) => item}
-                            selected={new Date().toDateString()}
-                            futureScrollRange={futureMonths}
-                            onDayPress={() => {}}
-                            renderToHardwareTextureAndroid
-                            onDayLongPress={(date) => navigation.navigate('SchedulerDayViewScreen', {date})}
 
-                            onEndReached={() => {
-                                setFutureMonths(c => c + 3);
-                            }}
-                            onEndReachedThreshold={0.5}
-                        />
-                    )
-            }
+            <ViewAgenda events={events}/>
 
             <FloatButton style={{position: 'absolute', bottom: 35, right: 35}} icon="add-outline" color="#202020" fn={navigateToAddEvent}/>
 
@@ -91,4 +61,4 @@ export const SchedulerScreen = React.memo(({navigation}: Props) => {
 
         </View>
     );
-});
+};

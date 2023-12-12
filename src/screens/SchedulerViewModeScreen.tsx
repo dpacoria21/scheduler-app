@@ -8,6 +8,8 @@ import { onDeleteActiveEvent } from '../store/calendar/calendarSlice';
 import { startDeleteEvent, startSetActiveEvent } from '../store/calendar/thunks';
 import { Event } from '../interfaces/storeInterfaces';
 import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { RootStackParams } from '../navigators/ScheduleNavigator';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -19,7 +21,7 @@ export const SchedulerViewModeScreen = ({mode, currentDate}: Props) => {
 
     const {events, activeEvent} = useSelector((state: RootState) => state.calendar);
 
-    const {navigate} = useNavigation();
+    const {navigate} = useNavigation<DrawerNavigationProp<RootStackParams>>();
 
     const dispatch = useAppDispatch();
 
